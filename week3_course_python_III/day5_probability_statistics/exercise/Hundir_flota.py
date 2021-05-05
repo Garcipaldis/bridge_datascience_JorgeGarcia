@@ -1,6 +1,4 @@
 
-
-
 class Tablero:
 
     def __init__(self, dic=None):
@@ -49,12 +47,13 @@ class Tablero:
 
 
 class Barco:
-
+    #TODO Nacho se encarga del desarrollo de esta clase.
     def __init__(self, size, orientacion, start):
         self.size = size
         self.vida = size
         self.orientacion = orientacion
         self.start = start
+        self.coordenada = [(2,2,True), (2,3,True), (2,4,True)]
 
     def update_salud(self, coordenada):
         pass
@@ -66,4 +65,5 @@ if __name__ == '__main__':
     b = Barco(3, 'v', '22')
     t.add_ship(b)
     t.display_tablero()
-    print(t.ships[0].vida)
+
+    coordenadas = [(2,2), (2,3), (2,4)]
