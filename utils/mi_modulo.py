@@ -1,6 +1,14 @@
-import os
+import os, sys
 import random
 import itertools
+
+# Directorios
+
+def add_path(num):
+    ruta = __file__ # en caso de jupyter se usa os.getcwd()
+    for i in range(num):
+        ruta = os.path.dirname(ruta)
+    sys.path.append(ruta)
 
 # Funciones útiles para Numpy
 
