@@ -2,9 +2,15 @@ import os, sys
 import random
 import itertools
 
+import numpy as np
+
 # Directorios
 
 def add_path(num):
+    '''Función guardada para poder importar módulos desde otros .py (os.getcwd() si es ipynb).
+    Args:
+        - num: indica el número de veces que se va a obtener la ruta superior.
+    '''
     ruta = __file__ # en caso de jupyter se usa os.getcwd()
     for i in range(num):
         ruta = os.path.dirname(ruta)
@@ -13,6 +19,13 @@ def add_path(num):
 # Funciones útiles para Numpy
 
 def filtra_array(funcion, array):
+    '''Devuelve una lista filtrada de un array de numpy.
+    Args:
+        - funcion: cualquier función de un argumento.
+        - array: array de una dimensión.
+    Returns:
+        - Lista filtrada.
+    '''
     return list(filter(funcion, list(array)))
 
 
@@ -20,16 +33,26 @@ def filtra_array(funcion, array):
 # Funciones que conciernen a comandos del sistema operativo
 
 def borrar_pantalla():
+    '''Función destinada a borrar la pantalla de la terminal. Muy útil para programas que actualicen datos por pantalla.
+    '''
     if os.name == 'posix':
         os.system ('clear')
     elif os.name == 'ce' or os.name == 'nt' or os.name == 'dos':
         os.system ('cls')
 
 def copiar_texto(cadena):
+    '''Función para copiar texto en el portapapeles del sistema.
+    Args:
+        - cadena: String que se copiará.
+    '''
     comando = 'echo ' + cadena.strip() + '| clip'
     os.system(comando)
 
+################################################################################################################################
 # CLASE de CODIFICACIÓN realizado como un proyecto anterior. Lo incluyo porque me ha resultado útil para contraseñas sencillas.
+################################################################################################################################
+
+#Estas funciones no las he desarrollado durante el curso pero considero que me pueden resultar útiles en un futuro.
 
 def genera_rotor():
     '''Utilizada para cambiar las variables de la clase enigmalite
