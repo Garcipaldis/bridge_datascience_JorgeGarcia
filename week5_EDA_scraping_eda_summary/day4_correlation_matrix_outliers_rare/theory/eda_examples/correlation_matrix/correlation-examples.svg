@@ -1,0 +1,1064 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Copyright 2017 mathsisfun.com -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="700"
+   height="139.5"
+   version="1.1"
+   style="font-family:Georgia; font-size:12.5px; fill:#ffff3e; stroke-width:0.78;"
+   id="svg401"
+   sodipodi:docname="correlation-examples.svg"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)">
+  <metadata
+     id="metadata405">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1366"
+     inkscape:window-height="705"
+     id="namedview403"
+     showgrid="false"
+     inkscape:zoom="2.21"
+     inkscape:cx="261.22904"
+     inkscape:cy="69.75"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg401" />
+  <defs
+     id="defs5">
+    <marker
+       id="id1"
+       style="overflow:visible;"
+       orient="auto">
+      <path
+         transform="matrix(-0.4,0,0,-0.4,-4,0)"
+         style="fill:none; stroke:black; stroke-width:1pt;"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         id="path2" />
+    </marker>
+  </defs>
+  <g
+     transform="matrix(0.241484,0,0,0.241484,874.35,-177.81)"
+     id="g27">
+    <path
+       style="marker-end:url(#id1); fill:#2e3436; fill-opacity:0.75; stroke:#2e3436; stroke-width:3;"
+       d="m -2339.3,1239.3 h 355.4"
+       id="path7" />
+    <path
+       style="marker-end:url(#id1); fill:#2e3436; fill-opacity:0.75; stroke:#2e3436; stroke-width:3;"
+       d="M -2338.5,1239 V 913.5"
+       id="path9" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="m -2339.3,1164.5 h 333.1"
+       id="path11" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="m -2339.3,1089.8 h 333.1"
+       id="path13" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="m -2339.3,1015 h 333.1"
+       id="path15" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="m -2339.3,940.2 h 333.1"
+       id="path17" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="M -2255.7,1239 V 941.4"
+       id="path19" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="M -2172.9,1239 V 941.4"
+       id="path21" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="M -2090.2,1239 V 941.4"
+       id="path23" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="M -2007.4,1239 V 941.4"
+       id="path25" />
+  </g>
+  <circle
+     cx="326.8"
+     cy="61"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#ff6600; stroke-linejoin:round;"
+     id="circle29" />
+  <circle
+     cx="330"
+     cy="87.5"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#ff6600; stroke-linejoin:round;"
+     id="circle31" />
+  <circle
+     cx="366.7"
+     cy="104.2"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#ff6600; stroke-linejoin:round;"
+     id="circle33" />
+  <circle
+     cx="376.9"
+     cy="75.8"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#ff6600; stroke-linejoin:round;"
+     id="circle35" />
+  <circle
+     cx="364.8"
+     cy="61.3"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#ff6600; stroke-linejoin:round;"
+     id="circle37" />
+  <circle
+     cx="348.6"
+     cy="78.6"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#ff6600; stroke-linejoin:round;"
+     id="circle39" />
+  <circle
+     cx="326.6"
+     cy="109"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#ff6600; stroke-linejoin:round;"
+     id="circle41" />
+  <circle
+     cx="366.3"
+     cy="110.7"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#ff6600; stroke-linejoin:round;"
+     id="circle43" />
+  <circle
+     cx="366.1"
+     cy="90.2"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#ff6600; stroke-linejoin:round;"
+     id="circle45" />
+  <circle
+     cx="347.7"
+     cy="98.2"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#ff6600; stroke-linejoin:round;"
+     id="circle47" />
+  <circle
+     cx="323"
+     cy="73.5"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#ff6600; stroke-linejoin:round;"
+     id="circle49" />
+  <circle
+     cx="350.3"
+     cy="62.7"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#ff6600; stroke-linejoin:round;"
+     id="circle51" />
+  <circle
+     cx="376"
+     cy="63.6"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#ff6600; stroke-linejoin:round;"
+     id="circle53" />
+  <circle
+     cx="359.6"
+     cy="82"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#ff6600; stroke-linejoin:round;"
+     id="circle55" />
+  <circle
+     cx="334.8"
+     cy="103.7"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#ff6600; stroke-linejoin:round;"
+     id="circle57" />
+  <g
+     transform="matrix(0.241484,0,0,0.241484,673.767,-177.893)"
+     id="g79">
+    <path
+       style="marker-end:url(#id1); fill:#2e3436; fill-opacity:0.75; stroke:#2e3436; stroke-width:3;"
+       d="m -2339.3,1239.3 h 355.4"
+       id="path59" />
+    <path
+       style="marker-end:url(#id1); fill:#2e3436; fill-opacity:0.75; stroke:#2e3436; stroke-width:3;"
+       d="M -2338.5,1239 V 913.5"
+       id="path61" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="m -2339.3,1164.5 h 333.1"
+       id="path63" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="m -2339.3,1089.8 h 333.1"
+       id="path65" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="m -2339.3,1015 h 333.1"
+       id="path67" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="m -2339.3,940.2 h 333.1"
+       id="path69" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="M -2255.7,1239 V 941.4"
+       id="path71" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="M -2172.9,1239 V 941.4"
+       id="path73" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="M -2090.2,1239 V 941.4"
+       id="path75" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="M -2007.4,1239 V 941.4"
+       id="path77" />
+  </g>
+  <circle
+     cx="116.9"
+     cy="116.1"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#00049d; stroke-linejoin:round;"
+     id="circle81" />
+  <circle
+     cx="125.2"
+     cy="102.8"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#00049d; stroke-linejoin:round;"
+     id="circle83" />
+  <circle
+     cx="126"
+     cy="111.3"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#00049d; stroke-linejoin:round;"
+     id="circle85" />
+  <circle
+     cx="143.4"
+     cy="96"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#00049d; stroke-linejoin:round;"
+     id="circle87" />
+  <circle
+     cx="156.5"
+     cy="92.3"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#00049d; stroke-linejoin:round;"
+     id="circle89" />
+  <circle
+     cx="160"
+     cy="80.6"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#00049d; stroke-linejoin:round;"
+     id="circle91" />
+  <circle
+     cx="156.4"
+     cy="75.8"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#00049d; stroke-linejoin:round;"
+     id="circle93" />
+  <circle
+     cx="173.8"
+     cy="68.8"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#00049d; stroke-linejoin:round;"
+     id="circle95" />
+  <circle
+     cx="179.9"
+     cy="64.4"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#00049d; stroke-linejoin:round;"
+     id="circle97" />
+  <circle
+     cx="181"
+     cy="57.2"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#00049d; stroke-linejoin:round;"
+     id="circle99" />
+  <circle
+     cx="145.9"
+     cy="88.4"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#00049d; stroke-linejoin:round;"
+     id="circle101" />
+  <circle
+     cx="172.5"
+     cy="79.1"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#00049d; stroke-linejoin:round;"
+     id="circle103" />
+  <circle
+     cx="137.1"
+     cy="104.6"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#00049d; stroke-linejoin:round;"
+     id="circle105" />
+  <circle
+     cx="183.1"
+     cy="72"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#00049d; stroke-linejoin:round;"
+     id="circle107" />
+  <text
+     x="154.39999"
+     y="11.4"
+     style="font-style:italic;text-align:center;text-anchor:middle;fill:#00049d;stroke-width:0.20999999px"
+     id="text109">Correlación</text>
+  <g
+     transform="matrix(0.241484,0,0,0.241484,777.463,-177.569)"
+     id="g131">
+    <path
+       style="marker-end:url(#id1); fill:#2e3436; fill-opacity:0.75; stroke:#2e3436; stroke-width:3;"
+       d="m -2339.3,1239.3 h 355.4"
+       id="path111" />
+    <path
+       style="marker-end:url(#id1); fill:#2e3436; fill-opacity:0.75; stroke:#2e3436; stroke-width:3;"
+       d="M -2338.5,1239 V 913.5"
+       id="path113" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="m -2339.3,1164.5 h 333.1"
+       id="path115" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="m -2339.3,1089.8 h 333.1"
+       id="path117" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="m -2339.3,1015 h 333.1"
+       id="path119" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="m -2339.3,940.2 h 333.1"
+       id="path121" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="M -2255.7,1239 V 941.4"
+       id="path123" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="M -2172.9,1239 V 941.4"
+       id="path125" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="M -2090.2,1239 V 941.4"
+       id="path127" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="M -2007.4,1239 V 941.4"
+       id="path129" />
+  </g>
+  <circle
+     cx="224.4"
+     cy="90.4"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#0084c8; stroke-linejoin:round;"
+     id="circle133" />
+  <circle
+     cx="226.5"
+     cy="104.1"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#0084c8; stroke-linejoin:round;"
+     id="circle135" />
+  <circle
+     cx="248.3"
+     cy="107.7"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#0084c8; stroke-linejoin:round;"
+     id="circle137" />
+  <circle
+     cx="240.9"
+     cy="90"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#0084c8; stroke-linejoin:round;"
+     id="circle139" />
+  <circle
+     cx="261.8"
+     cy="91.4"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#0084c8; stroke-linejoin:round;"
+     id="circle141" />
+  <circle
+     cx="267.3"
+     cy="79"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#0084c8; stroke-linejoin:round;"
+     id="circle143" />
+  <circle
+     cx="287.2"
+     cy="69"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#0084c8; stroke-linejoin:round;"
+     id="circle145" />
+  <circle
+     cx="281.7"
+     cy="86.3"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#0084c8; stroke-linejoin:round;"
+     id="circle147" />
+  <circle
+     cx="281.5"
+     cy="58.7"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#0084c8; stroke-linejoin:round;"
+     id="circle149" />
+  <circle
+     cx="248.8"
+     cy="75.1"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#0084c8; stroke-linejoin:round;"
+     id="circle151" />
+  <circle
+     cx="236.7"
+     cy="103.7"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#0084c8; stroke-linejoin:round;"
+     id="circle153" />
+  <circle
+     cx="221"
+     cy="113.4"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#0084c8; stroke-linejoin:round;"
+     id="circle155" />
+  <text
+     x="257.60001"
+     y="11.4"
+     style="font-style:italic;text-align:center;text-anchor:middle;fill:#0084c8;stroke-width:0.20999999px"
+     id="text157">Correlación</text>
+  <g
+     transform="matrix(0.241484,0,0,0.241484,1074.59,-177.897)"
+     id="g179">
+    <path
+       style="marker-end:url(#id1); fill:#2e3436; fill-opacity:0.75; stroke:#2e3436; stroke-width:3;"
+       d="m -2339.3,1239.3 h 355.4"
+       id="path159" />
+    <path
+       style="marker-end:url(#id1); fill:#2e3436; fill-opacity:0.75; stroke:#2e3436; stroke-width:3;"
+       d="M -2338.5,1239 V 913.5"
+       id="path161" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="m -2339.3,1164.5 h 333.1"
+       id="path163" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="m -2339.3,1089.8 h 333.1"
+       id="path165" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="m -2339.3,1015 h 333.1"
+       id="path167" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="m -2339.3,940.2 h 333.1"
+       id="path169" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="M -2255.7,1239 V 941.4"
+       id="path171" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="M -2172.9,1239 V 941.4"
+       id="path173" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="M -2090.2,1239 V 941.4"
+       id="path175" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="M -2007.4,1239 V 941.4"
+       id="path177" />
+  </g>
+  <circle
+     cx="521.3"
+     cy="56.3"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#dc0000; stroke-linejoin:round;"
+     id="circle181" />
+  <circle
+     cx="526.9"
+     cy="63.9"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#dc0000; stroke-linejoin:round;"
+     id="circle183" />
+  <circle
+     cx="520.9"
+     cy="64.8"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#dc0000; stroke-linejoin:round;"
+     id="circle185" />
+  <circle
+     cx="535.1"
+     cy="72.8"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#dc0000; stroke-linejoin:round;"
+     id="circle187" />
+  <circle
+     cx="540.4"
+     cy="82.9"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#dc0000; stroke-linejoin:round;"
+     id="circle189" />
+  <circle
+     cx="555.3"
+     cy="85.7"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#dc0000; stroke-linejoin:round;"
+     id="circle191" />
+  <circle
+     cx="557.1"
+     cy="94.6"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#dc0000; stroke-linejoin:round;"
+     id="circle193" />
+  <circle
+     cx="572.1"
+     cy="98.4"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#dc0000; stroke-linejoin:round;"
+     id="circle195" />
+  <circle
+     cx="570.2"
+     cy="107.7"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#dc0000; stroke-linejoin:round;"
+     id="circle197" />
+  <circle
+     cx="561.5"
+     cy="97.5"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#dc0000; stroke-linejoin:round;"
+     id="circle199" />
+  <circle
+     cx="580.3"
+     cy="108.5"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#dc0000; stroke-linejoin:round;"
+     id="circle201" />
+  <circle
+     cx="547.6"
+     cy="93.3"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#dc0000; stroke-linejoin:round;"
+     id="circle203" />
+  <circle
+     cx="546.7"
+     cy="79.1"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#dc0000; stroke-linejoin:round;"
+     id="circle205" />
+  <circle
+     cx="533.4"
+     cy="77.4"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#dc0000; stroke-linejoin:round;"
+     id="circle207" />
+  <circle
+     cx="534.7"
+     cy="65.2"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#dc0000; stroke-linejoin:round;"
+     id="circle209" />
+  <text
+     x="554.90002"
+     y="11.4"
+     style="font-style:italic;text-align:center;text-anchor:middle;fill:#b90000;stroke-width:0.20999999px"
+     id="text211">Correlación</text>
+  <g
+     transform="matrix(0.241484,0,0,0.241484,977.537,-177.549)"
+     id="g233">
+    <path
+       style="marker-end:url(#id1); fill:#2e3436; fill-opacity:0.75; stroke:#2e3436; stroke-width:3;"
+       d="m -2339.3,1239.3 h 355.4"
+       id="path213" />
+    <path
+       style="marker-end:url(#id1); fill:#2e3436; fill-opacity:0.75; stroke:#2e3436; stroke-width:3;"
+       d="M -2338.5,1239 V 913.5"
+       id="path215" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="m -2339.3,1164.5 h 333.1"
+       id="path217" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="m -2339.3,1089.8 h 333.1"
+       id="path219" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="m -2339.3,1015 h 333.1"
+       id="path221" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="m -2339.3,940.2 h 333.1"
+       id="path223" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="M -2255.7,1239 V 941.4"
+       id="path225" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="M -2172.9,1239 V 941.4"
+       id="path227" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="M -2090.2,1239 V 941.4"
+       id="path229" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="M -2007.4,1239 V 941.4"
+       id="path231" />
+  </g>
+  <circle
+     cx="422.4"
+     cy="55.8"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#ff4141; stroke-linejoin:round;"
+     id="circle235" />
+  <circle
+     cx="441.2"
+     cy="80"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#ff4141; stroke-linejoin:round;"
+     id="circle237" />
+  <circle
+     cx="457.4"
+     cy="71.1"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#ff4141; stroke-linejoin:round;"
+     id="circle239" />
+  <circle
+     cx="440.4"
+     cy="96.4"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#ff4141; stroke-linejoin:round;"
+     id="circle241" />
+  <circle
+     cx="473.2"
+     cy="101.5"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#ff4141; stroke-linejoin:round;"
+     id="circle243" />
+  <circle
+     cx="462.7"
+     cy="113.8"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#ff4141; stroke-linejoin:round;"
+     id="circle245" />
+  <circle
+     cx="461.8"
+     cy="95.3"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#ff4141; stroke-linejoin:round;"
+     id="circle247" />
+  <circle
+     cx="487.5"
+     cy="112.6"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#ff4141; stroke-linejoin:round;"
+     id="circle249" />
+  <circle
+     cx="460"
+     cy="86.9"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#ff4141; stroke-linejoin:round;"
+     id="circle251" />
+  <circle
+     cx="441.2"
+     cy="71.1"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#ff4141; stroke-linejoin:round;"
+     id="circle253" />
+  <circle
+     cx="424.8"
+     cy="85.1"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#ff4141; stroke-linejoin:round;"
+     id="circle255" />
+  <circle
+     cx="457.4"
+     cy="104.2"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#ff4141; stroke-linejoin:round;"
+     id="circle257" />
+  <circle
+     cx="482.7"
+     cy="92.6"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#ff4141; stroke-linejoin:round;"
+     id="circle259" />
+  <circle
+     cx="428.4"
+     cy="73.5"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#ff4141; stroke-linejoin:round;"
+     id="circle261" />
+  <text
+     x="457.39999"
+     y="11.4"
+     style="font-style:italic;text-align:center;text-anchor:middle;fill:#ff4141;stroke-width:0.20999999px"
+     id="text263">Correlación</text>
+  <g
+     transform="matrix(0.241484,0,0,0.241484,566.55,-177.893)"
+     id="g285">
+    <path
+       style="marker-end:url(#id1); fill:#2e3436; fill-opacity:0.75; stroke:#2e3436; stroke-width:3;"
+       d="m -2339.3,1239.3 h 355.4"
+       id="path265" />
+    <path
+       style="marker-end:url(#id1); fill:#2e3436; fill-opacity:0.75; stroke:#2e3436; stroke-width:3;"
+       d="M -2338.5,1239 V 913.5"
+       id="path267" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="m -2339.3,1164.5 h 333.1"
+       id="path269" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="m -2339.3,1089.8 h 333.1"
+       id="path271" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="m -2339.3,1015 h 333.1"
+       id="path273" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="m -2339.3,940.2 h 333.1"
+       id="path275" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="M -2255.7,1239 V 941.4"
+       id="path277" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="M -2172.9,1239 V 941.4"
+       id="path279" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="M -2090.2,1239 V 941.4"
+       id="path281" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="M -2007.4,1239 V 941.4"
+       id="path283" />
+  </g>
+  <circle
+     cx="6.3"
+     cy="102.5"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#00049d; stroke-linejoin:round;"
+     id="circle287" />
+  <circle
+     cx="20.4"
+     cy="95.8"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#00049d; stroke-linejoin:round;"
+     id="circle289" />
+  <circle
+     cx="34.3"
+     cy="89.2"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#00049d; stroke-linejoin:round;"
+     id="circle291" />
+  <circle
+     cx="52.8"
+     cy="80.6"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#00049d; stroke-linejoin:round;"
+     id="circle293" />
+  <circle
+     cx="56.7"
+     cy="78.7"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#00049d; stroke-linejoin:round;"
+     id="circle295" />
+  <circle
+     cx="68.6"
+     cy="72.7"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#00049d; stroke-linejoin:round;"
+     id="circle297" />
+  <circle
+     cx="40"
+     cy="86.8"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#00049d; stroke-linejoin:round;"
+     id="circle299" />
+  <circle
+     cx="38.4"
+     cy="87.7"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#00049d; stroke-linejoin:round;"
+     id="circle301" />
+  <circle
+     cx="64.2"
+     cy="75"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#00049d; stroke-linejoin:round;"
+     id="circle303" />
+  <circle
+     cx="26.3"
+     cy="93.3"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#00049d; stroke-linejoin:round;"
+     id="circle305" />
+  <circle
+     cx="76.9"
+     cy="68.8"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#00049d; stroke-linejoin:round;"
+     id="circle307" />
+  <text
+     x="46.299999"
+     y="11.4"
+     style="font-style:italic;text-align:center;text-anchor:middle;fill:#00049d;stroke-width:0.20999999px"
+     id="text309">Correlación</text>
+  <g
+     transform="matrix(0.241484,0,0,0.241484,1177.65,-177.915)"
+     id="g331">
+    <path
+       style="marker-end:url(#id1); fill:#2e3436; fill-opacity:0.75; stroke:#2e3436; stroke-width:3;"
+       d="m -2339.3,1239.3 h 355.4"
+       id="path311" />
+    <path
+       style="marker-end:url(#id1); fill:#2e3436; fill-opacity:0.75; stroke:#2e3436; stroke-width:3;"
+       d="M -2338.5,1239 V 913.5"
+       id="path313" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="m -2339.3,1164.5 h 333.1"
+       id="path315" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="m -2339.3,1089.8 h 333.1"
+       id="path317" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="m -2339.3,1015 h 333.1"
+       id="path319" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="m -2339.3,940.2 h 333.1"
+       id="path321" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="M -2255.7,1239 V 941.4"
+       id="path323" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="M -2172.9,1239 V 941.4"
+       id="path325" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="M -2090.2,1239 V 941.4"
+       id="path327" />
+    <path
+       style="fill:none; stroke:#d8dadc; stroke-width:2; stroke-dasharray:16, 2;"
+       d="M -2007.4,1239 V 941.4"
+       id="path329" />
+  </g>
+  <circle
+     cx="629.2"
+     cy="58.2"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#dc0000; stroke-linejoin:round;"
+     id="circle333" />
+  <circle
+     cx="632.6"
+     cy="61.6"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#dc0000; stroke-linejoin:round;"
+     id="circle335" />
+  <circle
+     cx="634.6"
+     cy="63.8"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#dc0000; stroke-linejoin:round;"
+     id="circle337" />
+  <circle
+     cx="642.6"
+     cy="72.1"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#dc0000; stroke-linejoin:round;"
+     id="circle339" />
+  <circle
+     cx="650.2"
+     cy="80.1"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#dc0000; stroke-linejoin:round;"
+     id="circle341" />
+  <circle
+     cx="660.7"
+     cy="91"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#dc0000; stroke-linejoin:round;"
+     id="circle343" />
+  <circle
+     cx="665.9"
+     cy="96.5"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#dc0000; stroke-linejoin:round;"
+     id="circle345" />
+  <circle
+     cx="678.5"
+     cy="109.6"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#dc0000; stroke-linejoin:round;"
+     id="circle347" />
+  <circle
+     cx="668.7"
+     cy="99.4"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#dc0000; stroke-linejoin:round;"
+     id="circle349" />
+  <circle
+     cx="679.5"
+     cy="110.6"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#dc0000; stroke-linejoin:round;"
+     id="circle351" />
+  <circle
+     cx="657.5"
+     cy="87.7"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#dc0000; stroke-linejoin:round;"
+     id="circle353" />
+  <circle
+     cx="637.7"
+     cy="67.1"
+     r="1.26076"
+     style="fill-opacity:0.43; stroke:#dc0000; stroke-linejoin:round;"
+     id="circle355" />
+  <text
+     x="657.70001"
+     y="11.4"
+     style="font-style:italic;text-align:center;text-anchor:middle;fill:#b90000;stroke-width:0.20999999px"
+     id="text357">Correlación</text>
+  <text
+     x="40.2"
+     y="139.3"
+     style="font-family:Verdana; font-size:17.4px; fill:black; stroke-width:0.24px;"
+     id="text359">1</text>
+  <text
+     x="139.8"
+     y="139.2"
+     style="font-family:Verdana; font-size:17.4px; fill:black; stroke-width:0.24px;"
+     id="text361">0.9</text>
+  <text
+     x="244"
+     y="139.2"
+     style="font-family:Verdana; font-size:17.4px; fill:black; stroke-width:0.24px;"
+     id="text363">0.5</text>
+  <text
+     x="345.8"
+     y="139.2"
+     style="font-family:Verdana; font-size:17.4px; fill:black; stroke-width:0.24px;"
+     id="text365">0</text>
+  <text
+     x="440.4"
+     y="139.2"
+     style="font-family:Verdana; font-size:17.4px; fill:black; stroke-width:0.24px;"
+     id="text367">-0.5</text>
+  <text
+     x="540.6"
+     y="139.2"
+     style="font-family:Verdana; font-size:17.4px; fill:black; stroke-width:0.24px;"
+     id="text369">-0.9</text>
+  <text
+     x="656.2"
+     y="139.3"
+     style="font-family:Verdana; font-size:17.4px; fill:black; stroke-width:0.24px;"
+     id="text371">-1</text>
+  <text
+     x="154.39999"
+     y="23.9"
+     style="font-style:italic;text-align:center;text-anchor:middle;fill:#00049d;stroke-width:0.20999999px"
+     id="text373">Positiva</text>
+  <text
+     x="257.60001"
+     y="23.9"
+     style="font-style:italic;text-align:center;text-anchor:middle;fill:#0084c8;stroke-width:0.20999999px"
+     id="text375">Positiva</text>
+  <text
+     x="554.90002"
+     y="23.9"
+     style="font-style:italic;text-align:center;text-anchor:middle;fill:#b90000;stroke-width:0.20999999px"
+     id="text377">Negativa</text>
+  <text
+     x="457.39999"
+     y="23.9"
+     style="font-style:italic;text-align:center;text-anchor:middle;fill:#ff4141;stroke-width:0.20999999px"
+     id="text379">Negativa</text>
+  <text
+     x="354.89999"
+     y="19.9"
+     style="font-style:italic;text-align:center;text-anchor:middle;fill:#009100;stroke-width:0.20999999px"
+     id="text381">Sin</text>
+  <text
+     x="46.400002"
+     y="23.9"
+     style="font-style:italic;text-align:center;text-anchor:middle;fill:#00049d;stroke-width:0.20999999px"
+     id="text383">Positiva</text>
+  <text
+     x="657.70001"
+     y="23.9"
+     style="font-style:italic;text-align:center;text-anchor:middle;fill:#b90000;stroke-width:0.20999999px"
+     id="text385">Negativa</text>
+  <text
+     x="154.39999"
+     y="37.900002"
+     style="font-style:italic;text-align:center;text-anchor:middle;fill:#00049d;stroke-width:0.20999999px"
+     id="text387">Alta</text>
+  <text
+     x="257.60001"
+     y="37.900002"
+     style="font-style:italic;text-align:center;text-anchor:middle;fill:#0084c8;stroke-width:0.20999999px"
+     id="text389">Baja</text>
+  <text
+     x="554.90002"
+     y="37.900002"
+     style="font-style:italic;text-align:center;text-anchor:middle;fill:#b90000;stroke-width:0.20999999px"
+     id="text391">Alta</text>
+  <text
+     x="457.39999"
+     y="37.900002"
+     style="font-style:italic;text-align:center;text-anchor:middle;fill:#ff4141;stroke-width:0.20999999px"
+     id="text393">Baja</text>
+  <text
+     x="354.89999"
+     y="33.900002"
+     style="font-style:italic;text-align:center;text-anchor:middle;fill:#009100;stroke-width:0.20999999px"
+     id="text395">Correlación</text>
+  <text
+     x="46.799999"
+     y="37.900002"
+     style="font-style:italic;text-align:center;text-anchor:middle;fill:#00049d;stroke-width:0.20999999px"
+     id="text397">Perfecta</text>
+  <text
+     x="657.70001"
+     y="37.900002"
+     style="font-style:italic;text-align:center;text-anchor:middle;fill:#b90000;stroke-width:0.20999999px"
+     id="text399">Perfecta</text>
+</svg>
