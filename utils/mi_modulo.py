@@ -57,7 +57,7 @@ def copiar_texto(cadena):
 def genera_rotor():
     '''Utilizada para cambiar las variables de la clase enigmalite
     '''
-    letras = ct.LETRAS
+    letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789xcpqe ?!'
     rango = range(len(letras))
     aleatorio = random.sample(rango, len(letras))
     lista_letras = [letras[aleatorio[n]] for n in rango]
