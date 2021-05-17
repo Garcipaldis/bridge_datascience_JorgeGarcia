@@ -398,5 +398,5 @@ class Game:
             self.play()
 
 if __name__ == '__main__':
-    game = Game(BARCOS_TEST)
+    game = Game(BARCOS)
     game.start(rand=True)
