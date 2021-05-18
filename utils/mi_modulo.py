@@ -1,8 +1,26 @@
 import os, sys
 import random
 import itertools
-
+import json
+import requests
+import time
 import numpy as np
+import pandas as pd
+
+# Data Wrangling
+
+def omdb_to_csv(name, num, key='7b2c6fff'):
+    movies = pd.read_csv(name)
+    data = []
+    for titleid in movies.loc[num:num+1000, 'titleId']:
+        omdb_url = f'http://www.omdbapi.com/?i={titleid}&apikey={key}'
+        r = requests.get(omdb_url).json()
+        data.append(r)
+        time.sleep(1)
+
+    df = pd.DataFrame(data)
+    df.to_csv(f'Data_OMDb_{num}.csv')
+    return df
 
 # Directorios
 
