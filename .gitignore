@@ -4,5 +4,7 @@ __pychache__/
 
 .ipynb/checkpoints
 
+#EDA Project
+EDA Project/data
 IMDb names.csv
-
+raw.tsv

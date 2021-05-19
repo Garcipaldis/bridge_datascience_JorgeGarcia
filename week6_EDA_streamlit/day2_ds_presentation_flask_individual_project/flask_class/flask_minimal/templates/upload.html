@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<div class='content'>
+    <h1 style="text-align: left; color: #f31e9a;" >Make your own</h1>
+    <link rel="stylesheet" href="static/css/style.css">
+<div class='content'>
+
+<body style="background-color: #acc9e7;">
+
+<form action = "http://localhost:1991/upload_form" method = "POST" enctype = "multipart/form-data">
+
+    Choose a Genre <SELECT name="Genre">
+        {% for a in Genre_list %}
+            <OPTION value={{a}}>{{a}}</option>
+        {% endfor %}
+        </SELECT><br>
+        
+    Choose a Platform <SELECT name="Platform">
+        {% for b in Platform_list %}
+            <OPTION value={{b}}>{{b}}</option>
+        {% endfor %}
+        </SELECT><br>
+    
+    Choose a Publisher <SELECT name="Publisher">
+        {% for c in Publisher_list %}
+            <OPTION value={{c}}>{{c}}</option>
+        {% endfor %}
+        </SELECT><br>
+    <input type = "submit"/>
+</form>
+
+</body>
+</html>

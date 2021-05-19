@@ -9,17 +9,22 @@ import pandas as pd
 
 # Data Wrangling
 
-def omdb_to_csv(name, num, key='7b2c6fff'):
-    movies = pd.read_csv(name)
+def omdb_to_csv(ruta, row_start, row_num=1000, key='7b2c6fff'):
+    movies = pd.read_csv(ruta)
     data = []
-    for titleid in movies.loc[num:num+1000, 'titleId']:
+    count = 1
+    for titleid in movies.loc[row_start:(row_start+row_num), 'titleId']:
         omdb_url = f'http://www.omdbapi.com/?i={titleid}&apikey={key}'
-        r = requests.get(omdb_url).json()
-        data.append(r)
-        time.sleep(1)
-
+        r = requests.get(omdb_url, params={'plot':'full'}).json()
+        if r['Response'] == True:
+            data.append(r)
+            time.sleep(0.5)
+        else:
+            break
+        print(count)
+        count += 1
     df = pd.DataFrame(data)
-    df.to_csv(f'Data_OMDb_{num}.csv')
+    df.to_csv(f'Data_OMDb_{row_start}.csv')
     return df
 
 # Directorios
@@ -234,5 +239,5 @@ class enigmalite:
 
 if __name__ == '__main__':
     e = enigmalite()
-    entrada = input('Introducir password a codificar:')
-    print(e.codificar(entrada, espacios=False))
+    entrada = input('Introducir password a codificar/decodificar:')
+    print(e.decodificar(entrada))

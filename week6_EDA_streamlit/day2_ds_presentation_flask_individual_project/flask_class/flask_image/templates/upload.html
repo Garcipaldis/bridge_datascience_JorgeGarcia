@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<div class='content'>
+    <h1 style="text-align: left; color: #b94388;" >Make your own</h1>
+    <link rel="stylesheet" href="static/css/style.css">
+<div class='content'>
+
+<body style="background-color: #acc9e7;">
+
+<p> Enter your data in <b>CSV</b> format and you'll get the number of columns and rows it has. 
+    Since you have to have that file in your computer, in order to upload it, this program
+    won't save the file again.
+</p>
+<form action="/shape" method="post" enctype="multipart/form-data" >
+    <input type="file" name="data_file" accept=".csv"/>
+    <br>
+    <input type="submit" />
+</form>
+
+
+
+<hr>
+<hr>
+<hr>
+
+
+
+
+<div class = 'row'>
+    <p>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        {%endwith %}
+    </p>
+    {% if filename %}
+    <div style = "padding:20px;">
+        <img src = "{{ url_for('display_image', filename = filename) }}">
+    </div>
+    {% endif %}
+    <form method = 'post' action = '/' enctype = 'multipart/form-data'>
+        <dl>
+            <p>
+                <input type = "file" name = "file" class = "form-control" autocomplete="off" accept=".jpg,.png" required>
+            </p>
+        </dl>
+        <p>
+            <input type = "submit" value = "Submit" class = "btn btn-info">
+        </p>
+    </form>
+</div>
+<hr>
+<hr>
+<hr>
+
+</body>
+</html>
