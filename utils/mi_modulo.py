@@ -10,21 +10,57 @@ import pandas as pd
 # Data Wrangling
 
 def omdb_to_csv(ruta, row_start, row_num=1000, key='7b2c6fff'):
+    """Función para obtener dataframes de la API de OMDb, destinada a la recolección de datos sobre pelícluas/series según IMDb.
+        - Args:
+            - ruta: Ruta del fichero csv donde se obtienen las IDs de IMDb.
+            - row_start: fila por la que se comienza a realizar peticiones a la API.
+            - row_num: número de filas a partir de row_start por las que se realiza la petición. Por defecto 1000.
+            - key: La clave para acceder a la API. Personal de cada usuario.
+        -Returns:
+            - Dataframe con los datos obtenidos.
+    """
     movies = pd.read_csv(ruta)
     data = []
     count = 1
     for titleid in movies.loc[row_start:(row_start+row_num), 'titleId']:
         omdb_url = f'http://www.omdbapi.com/?i={titleid}&apikey={key}'
         r = requests.get(omdb_url, params={'plot':'full'}).json()
-        if r['Response'] == True:
-            data.append(r)
-            time.sleep(0.5)
-        else:
-            break
+        time.sleep(0.5)
         print(count)
         count += 1
     df = pd.DataFrame(data)
     df.to_csv(f'Data_OMDb_{row_start}.csv')
+    return df
+
+def combined_to_list(path):
+    """ Función que transforma los ficheros 'combined' de Netflix para poder tratarlos posteriormente.
+        - Args:
+            - path: ruta donde se encuentra el fichero 'combined_data_x.txt'.
+        - Returns:
+            - lista de diccionarios.
+    """
+    with open(path, 'r') as raw:
+        text = raw.readlines()
+    res = []
+    k = []
+    for line in text:
+        if ':' not in line:
+            res.append(k + line.strip('\n').split(','))
+        else:
+            k = [line.strip(':\n')]
+    return res
+
+def combined_to_csv(path, num=0):
+    """ Funcion que transforma los ficheros 'combined' de Netflix a un dataframe. Emplea la función 'combined_to_list'.
+        - Args:
+            - path: ruta donde se encuentra el fichero 'combined_data_x.txt'.
+            - num: número del fichero combined.
+        - Returns:
+            - Dataframe.
+    """
+    lista = combined_to_list(path)
+    df = pd.DataFrame(lista, columns=['netflix_id', 'user_id', 'rating', 'date'])
+    df.to_csv(f'data/Net_combined_{num}.csv')
     return df
 
 # Directorios
