@@ -1,0 +1,10 @@
+Teoría:
+
+https://help.tableau.com/current/pro/desktop/en-us/datafields_typesandroles.htm
+https://www.analyticsvidhya.com/blog/2017/07/data-visualisation-made-easy/
+
+Ejemplo:
+
+https://public.tableau.com/app/profile/gabriel.v.zquez/viz/apr2021pre2/Historia
+https://public.tableau.com/profile/gabriel.v.zquez#!/vizhome/Example1_16151608255710/Hoja1?publish=yes
+https://public.tableau.com/profile/anavh#!/vizhome/Covid-1912092020/Covid-19
