@@ -1,8 +1,7 @@
-import os
+
 import pandas as pd
 import numpy as np
 import requests
-import json
 import nltk
 from collections import Counter
 
@@ -442,8 +441,15 @@ class word_cleaner:
                 filtered_word_stats.to_csv(f'{path}/{genre}_stats.csv')
                 print(f'{genre}_stats.csv successfully saved.')
 
+    def join_genres(self):
+        res_df = pd.DataFrame(columns=['word', 'count', 'genres', 'title_occurrence', '%_occurrence', 'mean_rating'])
+        for genre in self.genre_list:
+            df = pd.read_csv(f'data/Word_Stats/{genre}_stats.csv')
+        res_df = res_df.append(df)
+        res_df.to_csv('data/WORD_STATS.csv')
+
 if __name__ == '__main__':
     key_2 = 'a855df40'
     omdb = omdb_cleaner()
-    omdb.omdb_to_csv('data/IMDb_Clean_1.csv', 8000)
-    omdb.omdb_to_csv('data/IMDb_Clean_1.csv', 8000, key=key_2)
+    omdb.omdb_to_csv('data/IMDb_Clean_1.csv', 9000)
+    omdb.omdb_to_csv('data/IMDb_Clean_1.csv', 10000, key=key_2)
