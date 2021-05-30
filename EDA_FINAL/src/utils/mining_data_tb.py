@@ -5,6 +5,7 @@ import requests
 import nltk
 from collections import Counter
 
+
 nltk.download('punkt')
 nltk.download('averaged_perceptron_tagger')
 
@@ -13,7 +14,7 @@ nltk.download('averaged_perceptron_tagger')
 genres = ['History', 'Film-Noir', 'Animation', 'War', 'Biography', 'Sport', 'Musical', 
         'Family', 'Western', 'Documentary', 'Music', 'Adventure', 'Romance', 'Drama', 
         'Fantasy', 'Mystery', 'Crime', 'Comedy', 'Short', 'Action', 'Thriller', 'Sci-Fi', 
-        'Horror', 'Adult']
+        'Horror']
 
 net_path = 'data/Netflix_raw/movie_titles.csv'
 imdb_path = 'data/IMDb Datasets/types.tsv'
@@ -21,7 +22,7 @@ omdb_net_path = 'data/OMDb Netflix'
 
 ########### OMDB DATA MINING ##################################################################################################
 
-class omdb_cleaner:
+class OmdbCleaner:
 
     def __init__(self, net_path='data/Netflix_raw/movie_titles.csv', 
                 imdb_path='data/IMDb Datasets/types.tsv', omdb_net_path='data/OMDb Netflix'):
@@ -57,17 +58,17 @@ class omdb_cleaner:
 
         return net_data
 
-    def omdb_to_csv(self, path, row_start, row_num=999, key='7b2c6fff'):
+    def omdb_to_csv(self, filepath, row_start, row_num=999, key='7b2c6fff'):
         """Function design to obtain dataframes by calling the OMDb API. Said API is returns IMDb stats for a certain title.
             - Args:
-                - path: .csv filepath containing the IMDb IDs of the desired titles (ej.'Net_Data_ID.csv').
+                - filepath: .csv filepath containing the IMDb IDs of the desired titles (ej.'Net_Data_ID.csv').
                 - row_start: row from which to start sending API requests.
                 - row_num: Number of rows starting from row_start from which the API request is done.
                 - key: API key necessary in order to access the data. Obtained via: "http://www.omdbapi.com/apikey.aspx"
             -Returns:
                 - Dataframe
         """
-        movies = pd.read_csv(path)
+        movies = pd.read_csv(filepath)
         data = []
         count = 1
 
@@ -91,18 +92,26 @@ class omdb_cleaner:
             - Returns:
                 - Dataframe.
         """
-        data = [pd.read_csv(f'{omdb_net_path}/Data_OMDb_{i}.csv') for i in range(files)]
+        data = []
+        for i in range(files):
+            if i > 0:
+                data.append(pd.read_csv(f'{omdb_net_path}/Data_OMDb_{i}000.csv'))
+            else:
+                data.append(pd.read_csv(f'{omdb_net_path}/Data_OMDb_{i}.csv'))
         df = pd.concat(data)
         df = df.drop_duplicates().dropna(how='all').drop('Unnamed: 0', axis=1)
 
-        if save == True:
-            df.to_csv(f'{omdb_net_path}/OMDb_Net_Data.csv')
+        cleaned = df.sort_values('imdbRating', ascending=False).loc[:,['imdbID', 'Title', 'Year', 'imdbRating','Genre', 'Plot']]
+        cleaned = cleaned.dropna(how='any').reset_index().loc[:,'imdbID':]
 
-        return df
+        if save == True:
+            cleaned.to_csv(f'{omdb_net_path}/OMDb_Net_Data.csv')
+
+        return cleaned
 
 ########### NETFLIX DATA MINING #################################################################################################
 
-class net_cleaner:
+class NetCleaner:
 
     def combined_to_list(self, path):
         """ Function which transforms Netflix's 'Combined.text' files for later operations.
@@ -190,17 +199,22 @@ class net_cleaner:
 
 ########### WORD DATA MINING ##################################################################################################
 
-class word_cleaner:
+class WordCleaner:
 
-    def __init__(self, data, genre_list=None):
+    def __init__(self, data, expanse=pd.DataFrame(columns={'None':[]}), genre_dfs=None, genre_list=None):
         """ Instance constructor.
             - Args:
                 - data: Base Dataframe in which to operate.
-                - genre: genre list
+                - expanse: Expanded Dataframe by genre.
+                - genre_dfs: list of Dataframes by genre.
+                - genre_list: genre string list
         """
         self.data = data
-        self.expanse = None
-        self.genre_dfs = None
+        self.expanse = expanse
+        if genre_dfs:
+            self.genre_dfs = genre_dfs
+        else:
+            self.genre_dfs = {}
         if genre_list:
             self.genre_list = genre_list
         else:
@@ -218,22 +232,27 @@ class word_cleaner:
         """
         df = pd.DataFrame(columns=simple_row.index)
         row = simple_row.copy()
-        for genre in str(simple_row[column]).replace(',', '').split():
+        for genre in simple_row[column].replace(',', '').split():
             row[column] = genre
             df = df.append(row, ignore_index=True)
         return df
 
-    def expand_df(self, column='Genre'):
-        """ Function which applies 'unfold_by_column_value' for each row on a Dataframe.
+    def expand_df(self, column='Genre', net_data=True):
+        """ Function which applies 'unfold_by_column_value' for each row on the Base Dataframe.
             - Args:
                 - column: olumn to evaluate for the unfolding.
+                - net_data: Uses the Netflix-IMDb Dataframe by default.
             - Returns:
                 - Expanded Dataframe.
         """
-        #self.data[column] = self.data[column].apply(lambda x: str(x))
+        self.data[column] = self.data[column].apply(lambda x: str(x))
         df = pd.DataFrame(columns=self.data.columns)
-        for i, row in self.data.iterrows():
-            df = df.append(self.unfold_by_column_value(row))
+        if net_data:
+            filtered_data = self.data.loc[:, ['netflix_id', 'netflix_rating', 'imdbRating', 'Genre', 'Plot']]
+        elif net_data == False:
+            filtered_data = self.data.loc[:, ['imdbID', 'imdbRating','Genre', 'Plot']]
+        for i, row in filtered_data.iterrows():
+            df = df.append(self.unfold_by_column_value(row, column=column))
 
         self.expanse = df
         return df
@@ -243,13 +262,29 @@ class word_cleaner:
             - Returns:
                 - List of filtered Dataframes.
         """
-        if self.expanse == None:
+        if self.expanse.empty:
             self.expanse = self.expand_df(self.data)
 
         genre_dfs = {g : self.expanse[self.expanse.Genre == g] for g in self.genre_list}
 
         self.genre_dfs = genre_dfs
         return genre_dfs
+
+    def select_df(self, genre=None):
+        """ Function which returns a specific DataFrame. Either Base Dataframe or a filtered one.
+            - Args:
+                - genre: genre to which to select the Dataframe. 'None' selects the Base Dataframe.
+            - Returns:
+                - DataFrame.
+        """
+        if genre == None:
+            df = self.data.loc[:, ['netflix_id', 'netflix_rating', 'imdbRating', 'Genre', 'Plot']]
+        elif genre != None and self.genre_dfs == {}:
+            self.genre_dfs = self.get_genre_dataframes()
+            df = self.genre_dfs[genre]
+        else:
+            df = self.genre_dfs[genre]
+        return df
 
     def get_column_values(self, genre=None, column='Plot'):
         """ Function which extracts the values of a certain column
@@ -259,13 +294,7 @@ class word_cleaner:
             - Returns:
                 - list of string values.
         """
-        if genre == None:
-            df = self.data
-        elif genre and self.genre_dfs == None:
-            self.genre_dfs = self.get_genre_dataframes()
-            df = self.genre_dfs[genre]
-        else:
-            df = self.genre_dfs[genre]
+        df = self.select_df(genre=genre)
 
         column_values = [str(row[column]).lower() for i, row in df.iterrows()]
         return column_values
@@ -288,85 +317,18 @@ class word_cleaner:
 
         return result
 
-    def sum_dic_values(self, column_values):
-        """ Function which counts the number of ocurrences of every string of a list. Removes 'nan' values.
-            - Args:
-                - column_values: list of strings.
-            - Returns:
-                - Dictionary.
-        """
-        lista_dics = [Counter(str(column_values[i]).split()) for i in range(len(column_values))]
-        dic = {}
-        for diccionario in lista_dics:
-            for k, v in diccionario.items():
-                if k == 'nan':
-                    continue
-                elif k.lower() in dic.keys():
-                    dic[k.lower()] += v
-                else:
-                    dic[k.lower()] = v
-
-        return dic
-
-    def get_popular_words(self, filtered_df, column='Plot', top=10):
-        """ Function which finds the most common words of a given column of a certain Dataframe.
-            - Args:
-                - filtered_df: Dataframe. Optional: filtered by a certain genre.
-                - column: column from which to extract the values.
-                - top: number of instances to return.
-            - Returns:
-                - Dataframe.
-        """
-
-        column_values = self.get_column_values(filtered_df, column)
-        dic = self.sum_dic_values(column_values)
-
-        common_words = pd.DataFrame(dic.values(), index=dic.keys()).sort_values(0, ascending=False)
-        tokens = nltk.word_tokenize(' '.join(dic.keys()))
-        tagged = nltk.pos_tag(tokens)
-
-        tags = ['NN', 'NNS', 'NNP', 'NNPS', 'JJ', 'JS']
-        words = [t[0] for t in tagged if t[1] in tags and len(t[0]) > 1]
-
-        return common_words[common_words.index.isin(words)].head(top)
-
-    def popular_by_genre(self, top=10):
-        """ Function which loops on a list of dataframes and applies the 'get_popular_words' function.
-            - Args:
-                - top: number of instances to return on each dataframe.
-            - Returns:
-                - Dictionary of Dataframes.
-        """
-        if self.genre_dfs == None:
-            self.genre_dfs = self.get_genre_dataframes()
-
-        pop_genre = {}
-        for k, df in self.genre_dfs.items():
-            globals()['pop_%s' % k] = self.get_popular_words(df, top=top)
-            pop_genre[k] = (globals()['pop_%s' % k])
-        return pop_genre
-
-    def search_word_popularity(self, word, genre=None):
+    def search_word_popularity(self, word, genre=None, chosen_rating='netflix_rating'):
         """ Function designed to calculate different stats of a given word on a Dataframe.
         These stats have been specified inside the code to satisfy this EDA Project.
             - Args:
                 - word: Word for which to find the stats.
                 - genre: Specific genre value to filter.
+                - chosen_rating: Title rating to evaluate.
             - Returns:
                 - Dataframe containing the specified word stats.
         """
-        if genre == None:
-            df = self.data
-        elif genre and self.genre_dfs == None:
-            self.genre_dfs = self.get_genre_dataframes()
-            df = self.genre_dfs[genre]
-        else:
-            df = self.genre_dfs[genre]
-
+        df = self.select_df(genre=genre)
         dictionary = {'word': word, 'count': 0, 'genres':genre,'title_occurrence':0, '%_occurrence': 0}
-        if genre in self.genre_list:
-            df = df[df.Genre == genre]
-            dictionary['genres'] = genre
 
         total = len(df)
         column_values = self.get_column_values(genre=genre)
@@ -382,7 +344,7 @@ class word_cleaner:
                     for gen in gen_list:
                         if gen not in dictionary['genres']:
                             dictionary['genres'] += f'{gen},'
-                ratings.append(df.iloc[i]['imdbRating'])
+                ratings.append(df.iloc[i][chosen_rating])
 
         ratings = np.array(ratings)
         ratings = list(ratings[~np.isnan(ratings)])
@@ -394,62 +356,81 @@ class word_cleaner:
         
         return pd.DataFrame(dictionary, index=[0])
 
-    def list_to_popdf(self, word_list, genre=None,):
+    def get_popdf(self, genre=None, threshold=5, chosen_rating='netflix_rating', log=False):
         """ Function applies the 'search_word_popularity' on a loop to a given Dataframe.
         ** ATENTION ** 
         These function has not been optimized and requires a major amount of time and resources to finalize successfully.
         If used, it is recommended to give a short list of words.
             - Args:
-                - word_list: list of strings.
                 - genre: Specific genre value to filter.
+                - threshold: minimum %_occurrence value.
+                - chosen_rating: Title rating to evaluate.
+                - log: Option to print information about the process during execution.
             - Returns:
                 - Dataframe
         """
-        res_df = pd.DataFrame(columns=['word', 'count', 'genres', 'title_occurrence', '%_occurrence', 'mean_rating'])
+        column_values = self.get_column_values(genre=genre)
+        word_list = self.get_unique_word_list(column_values)
+
+        popdf = pd.DataFrame(columns=['word', 'count', 'genres', 'title_occurrence', '%_occurrence', 'mean_rating'])
         contador = 1
         for word in word_list:
-            res_df = res_df.append(self.search_word_popularity(word, genre=genre), ignore_index=True)
-            print(contador, 'rows inserted out of', len(word_list), f'into {genre}_stats.csv')
+            popdf = popdf.append(self.search_word_popularity(word, genre=genre, chosen_rating=chosen_rating), ignore_index=True)
+            if log:
+                print(contador, 'rows inserted out of', len(word_list), f'into {genre}_popdf')
             contador += 1
-        return res_df
+        popdf = popdf.dropna()
+        popdf = popdf[popdf['%_occurrence'] > threshold].sort_values('%_occurrence', ascending=False).reset_index()
+        return popdf
 
-    def genres_to_popcsv(self, threshold=5, path='data/Word_Stats'):
+    def genres_to_popcsv(self, threshold=5, chosen_rating='netflix_rating', filepath='data/Word_Stats'):
         """ Function designed to get the words stats of a given Dataframe filtered by genre up to a certain % of occurrence threshold.
             - Args:
-                - data: Base Dataframe. If already expanded, please change 'expand' argument to False.
-                - lista_genre: Genre list to use a filter.
                 - threshold: Minimum percentage of occurrence of a given word to be returned in the Dataframe.
-                - expand: If True, the Dataframe is expanded by using 'expand_df'.
-                - path: path where the Dataframes are saved.
+                - chosen_rating: Title rating to evaluate.
+                - filepath: path where the Dataframes are saved.
             - Returns:
                 - None. Instead, the obtained Dataframes are saved as csv files into a given path.
         """
-        if self.genre_dfs == None:
+        if self.genre_dfs == {}:
             self.genre_dfs = self.get_genre_dataframes()
 
         print('Generating list of Dataframes by Genre...')
         for genre in self.genre_list:
             try:
-                f = open(f'{path}/{genre}_stats.csv')
+                f = open(f'{filepath}/{genre}_stats.csv')
                 f.close()
             except:
                 print(f'Generating {genre} Dataframe...')
-                word_list = self.get_unique_word_list(column_values=self.get_column_values(self.genre_dfs[genre]))
-                word_stats = self.list_to_popdf(word_list, self.genre_dfs[genre], genre=genre)
-                word_stats = word_stats.dropna()
-                filtered_word_stats = word_stats[word_stats['%_occurrence'] > threshold].sort_values('%_occurrence', ascending=False).reset_index()
-                filtered_word_stats.to_csv(f'{path}/{genre}_stats.csv')
+                popdf = self.get_popdf(genre=genre, threshold=threshold, chosen_rating=chosen_rating, log=True)
+                popdf.to_csv(f'{filepath}/{genre}_stats.csv')
                 print(f'{genre}_stats.csv successfully saved.')
 
     def join_genres(self):
+        """ Simple function designed to join all existing word stats csv files into a single one.
+        """
         res_df = pd.DataFrame(columns=['word', 'count', 'genres', 'title_occurrence', '%_occurrence', 'mean_rating'])
         for genre in self.genre_list:
-            df = pd.read_csv(f'data/Word_Stats/{genre}_stats.csv')
-        res_df = res_df.append(df)
+            try:
+                f = open(f'data/Word_Stats/{genre}_stats.csv')
+                f.close()
+                df = pd.read_csv(f'data/Word_Stats/{genre}_stats.csv')
+                res_df = res_df.append(df)
+            except:
+                continue
         res_df.to_csv('data/WORD_STATS.csv')
 
+
 if __name__ == '__main__':
+    from folders_tb import add_path
+    rootpath = add_path(4, jupyter=False)
     key_2 = 'a855df40'
-    omdb = omdb_cleaner()
-    omdb.omdb_to_csv('data/IMDb_Clean_1.csv', 9000)
-    omdb.omdb_to_csv('data/IMDb_Clean_1.csv', 10000, key=key_2)
+    omdb = OmdbCleaner(omdb_net_path='data/OMDb General')
+    omdb.join_omdb(f'{rootpath}/EDA Project/data/OMDb General', files=11, save=True)
+    #omdb.omdb_to_csv(f'{rootpath}/EDA Project/data/IMDb_Clean_1.csv', 9000)
+    #omdb.omdb_to_csv(f'{rootpath}/EDA Project/data/IMDb_Clean_1.csv', 10000, key=key_2)
+    """rootpath = add_path(4, jupyter=False)
+    data = pd.read_csv(f'{rootpath}/EDA Project/MAIN_DATASET.csv')
+    expanse = pd.read_csv(f'{rootpath}/EDA Project/GENRE_DATASET.csv')
+    wcleaner = word_cleaner(data, expanse=expanse)
+    print(wcleaner.get_popdf(genre='War', log=True))"""
