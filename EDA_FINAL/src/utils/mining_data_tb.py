@@ -1,4 +1,4 @@
-
+import os
 import pandas as pd
 import numpy as np
 import requests
@@ -24,8 +24,8 @@ omdb_net_path = 'data/OMDb Netflix'
 
 class OmdbCleaner:
 
-    def __init__(self, net_path='data/Netflix_raw/movie_titles.csv', 
-                imdb_path='data/IMDb Datasets/types.tsv', omdb_net_path='data/OMDb Netflix'):
+    def __init__(self, net_path='./data/Netflix_raw/netlfix_movie_titles.csv', 
+                imdb_path='./data/IMDb Datasets/titles.tsv', omdb_net_path='./data/OMDb Netflix'):
         self.net_path = net_path
         self.imdb_path = imdb_path
         self.omdb_net_path = omdb_net_path
@@ -54,11 +54,11 @@ class OmdbCleaner:
         net_data.rename(columns={'tconst':'titleId'}, inplace=True)
         net_data.drop_duplicates('originalTitle', inplace=True)
         if save == True:
-            net_data.to_csv(f'{self.net_path}/Net_Data_ID.csv')
+            net_data.to_csv(os.path.dirname(self.net_path) + os.sep + 'Net_Data_ID.csv')
 
         return net_data
 
-    def omdb_to_csv(self, filepath, row_start, row_num=999, key='7b2c6fff'):
+    def omdb_to_csv(self, filepath, savepath, row_start, row_num=999, key='7b2c6fff'):
         """Function design to obtain dataframes by calling the OMDb API. Said API is returns IMDb stats for a certain title.
             - Args:
                 - filepath: .csv filepath containing the IMDb IDs of the desired titles (ej.'Net_Data_ID.csv').
@@ -80,7 +80,7 @@ class OmdbCleaner:
             count += 1
 
         df = pd.DataFrame(data)
-        df.to_csv(f'Data_OMDb_{row_start}.csv')
+        df.to_csv(f'{savepath}/Data_OMDb_{row_start}.csv')
         return df
 
     def join_omdb(self, omdb_net_path, files=10, save=False):
@@ -101,8 +101,8 @@ class OmdbCleaner:
         df = pd.concat(data)
         df = df.drop_duplicates().dropna(how='all').drop('Unnamed: 0', axis=1)
 
-        cleaned = df.sort_values('imdbRating', ascending=False).loc[:,['imdbID', 'Title', 'Year', 'imdbRating','Genre', 'Plot']]
-        cleaned = cleaned.dropna(how='any').reset_index().loc[:,'imdbID':]
+        cleaned = df.sort_values('imdbRating', ascending=False).loc[:,['imdbID', 'Title', 'Year', 'imdbRating','Metascore','Genre', 'Plot']]
+        cleaned = cleaned.reset_index().loc[:,'imdbID':]
 
         if save == True:
             cleaned.to_csv(f'{omdb_net_path}/OMDb_Net_Data.csv')
@@ -143,37 +143,44 @@ class NetCleaner:
         lista = self.combined_to_list(path)
         df = pd.DataFrame(lista, columns=['netflix_id', 'user_id', 'rating', 'date'])
         if save == True:
-            df.to_csv(f'data/Net_combined_{num}.csv')
+            df.to_csv(os.path.dirname(path) + f'/Net_combined_{num}.csv')
         return df
 
-    def get_title_ratings(self, folder_path, net_path, save=False):
+    def get_title_ratings(self, folder_path, savepath, save=False):
         """ Function which get all the transformed Netflix's 'combined.txt' data, 
         groups it by title and merges it with Net Movie Data.
             - Args:
                 - folderpath: folder containing the 'Net_combined' data.
-                - net_path: filepath of the netflix movie list.
+                - savepath: filepath where to save Dataframe.
                 - save: Option of saving DataFrame into a .csv file.
             - Returns:
                 - Dataframe.
         """
-
-        c1 = pd.read_csv(f'{folder_path}/Net_combined_1.csv')
-        c2 = pd.read_csv(f'{folder_path}/Net_combined_2.csv')
-        c3 = pd.read_csv(f'{folder_path}/Net_combined_3.csv')
-        c4 = pd.read_csv(f'{folder_path}/Net_combined_4.csv')
+        try:
+            c1 = pd.read_csv(f'{folder_path}/Net_combined_1.csv')
+            c2 = pd.read_csv(f'{folder_path}/Net_combined_2.csv')
+            c3 = pd.read_csv(f'{folder_path}/Net_combined_3.csv')
+            c4 = pd.read_csv(f'{folder_path}/Net_combined_4.csv')
+        except:
+            for i in range(1,5):
+                combined_path = folder_path + os.sep + 'combined_data_' + str(i) + '.txt'
+                self.combined_to_csv(combined_path, num=i, save=True)
+                c1 = pd.read_csv(f'{folder_path}/Net_combined_1.csv')
+                c2 = pd.read_csv(f'{folder_path}/Net_combined_2.csv')
+                c3 = pd.read_csv(f'{folder_path}/Net_combined_3.csv')
+                c4 = pd.read_csv(f'{folder_path}/Net_combined_4.csv')
 
         c = [c1, c2, c3, c4]
         net_comb_data = pd.concat(c)
         
         net_comb_data.rating = net_comb_data.rating.apply(lambda x: x*2)
         titles = net_comb_data.groupby('netflix_id').agg({'rating':'mean', 'user_id': 'count'})
-        titles = titles.rename(columns={'rating':'netflix_rating', 'Number of votes':'number_of_votes'})
-        net_movies = pd.read_csv(net_path, names=['netflix_id', 'startYear', 'Title'])
+        titles = titles.rename(columns={'rating':'netflix_rating', 'user_id':'number_of_votes'})
+        net_movies = pd.read_csv(folder_path + os.sep + 'netflix_movie_titles.csv', names=['netflix_id', 'startYear', 'Title'])
         df = pd.merge(titles, net_movies.loc[:, ['netflix_id', 'Title']], on='netflix_id')
         
         if save == True:
-            net_comb_data.to_csv('data/Netflix_Comb_Data.csv')
-            df.to_csv('data/Net_title_ratings.csv')
+            df.to_csv(f'{savepath}/Net_title_ratings.csv')
         
         return df
 
@@ -181,19 +188,18 @@ class NetCleaner:
         """ Function designed to merge netflix ratings vs omdb data in order to obtain a base dataframe
         from which to make future transformations.
             - Args:
-                - net_ratings_path: path containing the net ratings csv.
+                - net_ratings_path: path containing the net title ratings csv.
                 - omdb_net_path: path containing the omdb data csv.
                 - save: Option of saving DataFrame into a .csv file.
             - Returns:
                 - Base Dataframe
         """
-        net_ratings = pd.read_csv(net_ratings_path)
-        omdb_net_data = pd.read_csv(omdb_net_path)
+        net_ratings = pd.read_csv(net_ratings_path + os.sep + 'Net_title_ratings.csv')
+        omdb_net_data = pd.read_csv(omdb_net_path + os.sep + 'OMDb_Net_Data.csv')
         base_df = pd.merge(net_ratings, omdb_net_data, on='Title')
         base_df = base_df.drop('Unnamed: 0_x', axis=1).drop('Unnamed: 0_y', axis=1).drop_duplicates('netflix_id')
-        base_df = base_df.loc[:, 'netflix_id':'Type']
         if save == True:
-            base_df.to_csv('BASE_DATASET.csv')
+            base_df.to_csv(net_ratings_path + os.sep + 'BASE.csv')
         
         return base_df
 
