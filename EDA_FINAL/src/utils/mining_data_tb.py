@@ -426,9 +426,9 @@ if __name__ == '__main__':
     rootpath = add_path(4, jupyter=False)
     key_2 = 'a855df40'
     omdb = OmdbCleaner(omdb_net_path='data/OMDb General')
-    omdb.join_omdb(f'{rootpath}/EDA Project/data/OMDb General', files=11, save=True)
-    #omdb.omdb_to_csv(f'{rootpath}/EDA Project/data/IMDb_Clean_1.csv', 9000)
-    #omdb.omdb_to_csv(f'{rootpath}/EDA Project/data/IMDb_Clean_1.csv', 10000, key=key_2)
+    #omdb.join_omdb(f'{rootpath}/EDA Project/data/OMDb General', files=11, save=True)
+    omdb.omdb_to_csv(f'{rootpath}/EDA Project/data/IMDb_Clean_1.csv', 11000)
+    omdb.omdb_to_csv(f'{rootpath}/EDA Project/data/IMDb_Clean_1.csv', 12000, key=key_2)
     """rootpath = add_path(4, jupyter=False)
     data = pd.read_csv(f'{rootpath}/EDA Project/MAIN_DATASET.csv')
     expanse = pd.read_csv(f'{rootpath}/EDA Project/GENRE_DATASET.csv')
