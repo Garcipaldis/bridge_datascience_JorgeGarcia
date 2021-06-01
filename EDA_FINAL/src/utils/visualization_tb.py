@@ -1,3 +1,4 @@
+import os
 import seaborn as sns
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -70,18 +71,22 @@ class Visualizer:
         df.Year = df.Year.round(-1)
         return df
 
-    def plot_year_lineplot(self, y='netflix_rating', genre=None):
+    def plot_year_lineplot(self, y='netflix_rating', genre=None, save=None):
         """ Tendency plot over time.
         """
         if genre:
             df = self.decade_df(expanse=True)
             df = df[df.Genre == genre]
             sns.lineplot(data=df, x='Year', y=y, ci=None).set(title=f'{y} evolution over time for {genre}')
+            if save:
+                plt.savefig(save + os.sep + f'lineplot_{y}_{genre}.png')
         else:
             df = self.decade_df()
             sns.lineplot(data=df, x='Year', y=y, ci=None).set(title=f'{y} evolution over time')
+            if save:
+                plt.savefig(save + os.sep + f'lineplot_{y}.png')
 
-    def plot_displot(self, x='netflix_rating', kde=True, bins='auto', genre=None):
+    def plot_displot(self, x='netflix_rating', kde=True, bins='auto', genre=None, save=None):
         """ Simple sns.displot function to represent the frequency os a given x-axis from Base Dataframe.
             - Args:
                 - x: x-axis
@@ -90,11 +95,15 @@ class Visualizer:
         if genre:
             df = self.expanse[self.expanse.Genre == genre]
             sns.histplot(data=df, x=x, kde=kde, bins=bins).set(title=f'{x} distribution for {genre}')
+            if save:
+                plt.savefig(save + os.sep + f'{x}_distribution_{genre}.png')
         else:
             df = self.data.copy()
             sns.histplot(data=df, x=x, kde=kde, bins=bins).set(title=f'{x} distribution')
+            if save:
+                plt.savefig(save + os.sep + f'{x}_distribution.png')
 
-    def plot_genre_pie(self, top=10):
+    def plot_genre_pie(self, top=10, save=None):
         """ Pie Chart plot of the Genre distribution of the Expanded Dataframe.
             - Args:
                 - top: Top most frequent genres. The remaining categories are grouped under the label 'others'.
@@ -112,10 +121,11 @@ class Visualizer:
         labels = gen_4['Genre']
         plt.pie(x=gen_4['Total'], autopct="%.1f%%", labels=labels, pctdistance=0.5)
         plt.title("Titles by Genre", fontsize=14)
-        
+        if save:
+            plt.savefig(save + os.sep + "Titles_Genre.png")
         plt.show()
 
-    def plot_word_barchart(self, genre, x='%_occurrence', y='word', top=10, sort=0, show_values=False, common=True):
+    def plot_word_barchart(self, genre, x='%_occurrence', y='word', top=10, sort=0, show_values=False, common=True, save=None):
         """ Simple bar chart representing the top words of a given genre ordered by the selected axis.
             - genre: specific genre to plot.
             - x: x-axis
@@ -143,6 +153,8 @@ class Visualizer:
                         chart.annotate("%.0f" % p.get_height(), (p.get_x() + p.get_width() / 2., p.get_height()),
                             ha='center', va='center', fontsize=10, color='black', xytext=(0, 5),
                             textcoords='offset points')
+        if save:
+            plt.savefig(save + os.sep + f'{genre}_word_barchart_{sort}.png')
         plt.show()
 
     def top_by_genre(self, top=20, common=True):
@@ -162,7 +174,7 @@ class Visualizer:
             top = top.append(df[df.genres == g].head(20), ignore_index=True)
         return top
 
-    def plot_treemap(self, top=20, values='%_occurrence', color='mean_rating', width=800, height=400, common=True):
+    def plot_treemap(self, top=20, values='%_occurrence', color='mean_rating', width=800, height=400, common=True, save=None):
         """ Plots a treemap with the help of the 'top_by_genre' method.
             - Args:
                 - top: top most words for each genre.
@@ -175,9 +187,11 @@ class Visualizer:
         fig = px.treemap(df.dropna(), path=['Genres','genres','word'], values=values, 
                         color=color, color_continuous_scale='RdBu', title='Word % Occurrence by Genre',
                         width=width, height=height)
+        if save:
+            fig.write_image(save + os.sep + 'Word_Occurrence_Treemap.png')
         return fig
 
-    def generate_wordcloud(self, genre, values='%_occurrence', common=True, save=False):
+    def generate_wordcloud(self, genre, values='%_occurrence', common=True, save=None):
         """ Plots a word cloud image of the words of a certain genre.
             - genre: genre to evaluate.
             - values: Determines the word size inside the cloud.
@@ -200,16 +214,18 @@ class Visualizer:
             plt.axis("off")
             plt.show()
             if save:
-                wordcloud.to_file(f'{genre}_cloud.png')
+                wordcloud.to_file(save + os.sep + f'{genre}_cloud.png')
 
-    def timepie(self):
-        categories = {'Data Mining':50, 'Visualization':20, 'Flask':1, 'Streamlit':10, 'SQL': 3, 'Report Analysis':5}
+    def timepie(self, save=None):
+        categories = {'Data Mining':50, 'Visualization':20, 'Flask':1, 'Streamlit':10, 'SQL': 3, 'Reports and Documentation':7}
         pie, ax = plt.subplots(figsize=[10,6])
         labels = categories.keys()
         plt.pie(x=categories.values(), autopct="%.1f%%", labels=labels, pctdistance=0.5)
         plt.title("Time spent per Project Step", fontsize=14)
+        if save:
+            plt.savefig(save + os.sep + "Project_Steps.png")
 
-    def heatmap(self, data='base'):
+    def heatmap(self, data='base', save=None):
         
         if data == 'expanse':
             df = self.expanse.drop('Unnamed: 0', axis=1)
@@ -219,3 +235,5 @@ class Visualizer:
             df = self.data.drop('Unnamed: 0', axis=1)
 
         sns.heatmap(df.corr(), annot=True).set(title=f'{data} Heatmap')
+        if save:
+            plt.savefig(save + os.sep + f'{data}_Heatmap.png')

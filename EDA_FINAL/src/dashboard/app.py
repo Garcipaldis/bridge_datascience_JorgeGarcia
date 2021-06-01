@@ -20,44 +20,35 @@ df = None
 st.set_option('deprecation.showPyplotGlobalUse', False)
     
 menu = st.sidebar.selectbox('Menu:',
-            options=["Greetings", "Genre Pie Chart", "Rating Distribution", "Rating Tendencies",
+            options=["Greetings", "Datasets", "Genre Pie Chart", "Rating Distribution", "Rating Tendencies",
                 "WordCloud", "Treemap", "Base Word Bar Chart", "Flask", "Conclusions"])
 
 if menu == 'Greetings':
-    st.title('Netflix Title Plot Popularity Detailed Analysis')
     stream.greet()
 
+if menu == 'Datasets':
+    stream.dataset_page()
+
 if menu == 'Genre Pie Chart':
-    st.title('Netflix Title Plot Popularity Detailed Analysis')
     stream.piechart_page()
 
 if menu == 'Rating Distribution':
-    st.title('Netflix Title Plot Popularity Detailed Analysis')
     stream.distribution_page()
 
 if menu == 'Rating Tendencies':
-    st.title('Netflix Title Plot Popularity Detailed Analysis')
     stream.tendency_page()
 
 if menu == 'WordCloud':
-    st.title('Netflix Title Plot Popularity Detailed Analysis')
     stream.cloud_page(path)
 
 if menu == 'Treemap':
-    st.title('Netflix Title Plot Popularity Detailed Analysis')
     stream.treemap_page()
 
 if menu == 'Base Word Bar Chart':
-    st.title('Netflix Title Plot Popularity Detailed Analysis')
     stream.barchart_page()
 
 if menu == 'Flask':
-    st.title('Netflix Title Plot Popularity Detailed Analysis')
     stream.flask_page()
 
 if menu == 'Conclusions':
-    st.title('Netflix Title Plot Popularity Detailed Analysis')
     stream.conclude()
-
-if __name__ == '__main__':
-    print(path)

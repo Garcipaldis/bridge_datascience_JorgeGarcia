@@ -23,6 +23,7 @@ class StreamFuncs:
         self.viz = Visualizer(data, expanse, word_stats)
 
     def greet(self):
+        st.title('Netflix Titles Plot Popularity Detailed Analysis')
         st.subheader('EDA made by: Jorge García Navarro')
         st.write("\nThe purpose of this study is to find the most common words under each Netflix Title Plot grouped by Genre.")
         st.write("Furthermore, these popular words will be compared to the user ratings in order to find a possible correlation.""")
@@ -39,13 +40,26 @@ class StreamFuncs:
         st.write('Title: The Usual Suspects')
         st.write('Genres: Crime, Mystery, Thriller')
 
+    def dataset_page(self):
+        st.title('Netflix Titles Plot Popularity Detailed Analysis')
+        droplist = st.sidebar.selectbox('Select Dataset:',
+                            options=['BASE', 'EXPANDED','WORD STATS'])
+        if droplist == 'BASE':
+            st.dataframe(self.data.drop('Unnamed: 0', axis=1))
+        elif droplist == 'EXPANDED':
+            st.dataframe(self.expanse.drop('Unnamed: 0', axis=1))
+        elif droplist == 'WORD STATS':
+            st.dataframe(self.word_stats.drop('Unnamed: 0', axis=1))
+
     def piechart_page(self):
+        st.title('Netflix Titles Plot Popularity Detailed Analysis')
         top = st.sidebar.select_slider("Top Values",
                                     options=range(3, 21),
                                     value=10)
         st.pyplot(self.viz.plot_genre_pie(top))
     
     def distribution_page(self):
+        st.title('Netflix Titles Plot Popularity Detailed Analysis')
         droplist = st.sidebar.selectbox('Select Column Value:',
                             options=['netflix_rating', 'imdbRating','Metascore'])
         kde = st.sidebar.checkbox('kde')
@@ -57,6 +71,7 @@ class StreamFuncs:
             st.pyplot(self.viz.plot_displot(x=droplist, kde=kde, genre=genre))
 
     def tendency_page(self):
+        st.title('Netflix Titles Plot Popularity Detailed Analysis')
         droplist = st.sidebar.selectbox('Select Column Value:',
                                 options=['netflix_rating', 'imdbRating', 'Metascore'])
         genre = st.sidebar.selectbox('Select Genre:',
@@ -67,6 +82,7 @@ class StreamFuncs:
             st.pyplot(self.viz.plot_year_lineplot(y=droplist, genre=genre))
 
     def cloud_page(self, path):
+        st.title('Netflix Titles Plot Popularity Detailed Analysis')
         cloudpath = os.path.dirname(path) + os.sep + 'resources' + os.sep + 'wordclouds'
         for f in os.listdir(cloudpath):
             image = Image.open(cloudpath + os.sep + f)
@@ -74,10 +90,12 @@ class StreamFuncs:
             st.image(image)
 
     def treemap_page(self):
+        st.title('Netflix Titles Plot Popularity Detailed Analysis')
         common = st.sidebar.checkbox('Use common words', value=True)
         st.plotly_chart(self.viz.plot_treemap(width=1000, height=600, common=common))
 
     def barchart_page(self):
+        st.title('Netflix Titles Plot Popularity Detailed Analysis')
         droplist = st.sidebar.selectbox('Select Genre:',
                                 options=list(self.expanse.groupby('Genre').count().index))
         top = st.sidebar.select_slider("Top Values",
@@ -91,6 +109,7 @@ class StreamFuncs:
             st.pyplot(self.viz.plot_word_barchart(droplist, top=top, common=common))
 
     def flask_page(self):
+        st.title('Netflix Titles Plot Popularity Detailed Analysis')
         r = requests.get(url="http://localhost:6060/info?token_id=B53814652")
         response = r.json()
         show_json = st.sidebar.checkbox('Show returned Json')
@@ -109,6 +128,7 @@ class StreamFuncs:
             st.dataframe(df)
 
     def conclude(self):
+        st.title('Netflix Titles Plot Popularity Detailed Analysis')
         st.subheader('1. Was it possible to demonstrate the hypothesis? Why?')
         st.write("""After many data transformations on the Base Dataset, it was possible to find an answer to the stated hypothesis. 
                 The analyzed data showed not only that the best rated genre was Film-Noir instead of Drama, 
@@ -118,7 +138,7 @@ class StreamFuncs:
                 and the most common words by %_occurrence are: 'new', 'young', 'life'.""")
         st.subheader('3. What would you change if you need to do another EDAproject?')
         st.write("""The data mining should be more specific. 
-                There was not a clear goal at the beggining and valuable time was wasted on this particular task.
+                There was not a clear goal at the beginning and valuable time was wasted on this particular task.
                 Furthermore, the results would be more reliable if more data was gathered.
                 """)
         st.subheader('4. What did you learn doing this project?')
