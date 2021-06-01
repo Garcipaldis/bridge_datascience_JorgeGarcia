@@ -226,7 +226,7 @@ class WordCleaner:
         else:
             self.genre_list = ['History', 'Film-Noir', 'Animation', 'War', 'Biography', 'Sport', 'Musical', 'Family',
         'Western', 'Documentary', 'Music', 'Adventure', 'Romance', 'Drama', 'Fantasy', 'Mystery', 'Crime',
-        'Comedy', 'Short', 'Action', 'Thriller', 'Sci-Fi', 'Horror', 'Adult']
+        'Comedy', 'Short', 'Action', 'Thriller', 'Sci-Fi', 'Horror']
 
     def unfold_by_column_value(self, simple_row, column='Genre'):
         """Function which unfolds a single row by all its column values.
@@ -243,24 +243,27 @@ class WordCleaner:
             df = df.append(row, ignore_index=True)
         return df
 
-    def expand_df(self, column='Genre', net_data=True):
+    def expand_df(self, column='Genre', net_data=True, savepath=None, save=False):
         """ Function which applies 'unfold_by_column_value' for each row on the Base Dataframe.
             - Args:
-                - column: olumn to evaluate for the unfolding.
+                - column: column to evaluate for the unfolding.
                 - net_data: Uses the Netflix-IMDb Dataframe by default.
             - Returns:
                 - Expanded Dataframe.
         """
+
         self.data[column] = self.data[column].apply(lambda x: str(x))
         df = pd.DataFrame(columns=self.data.columns)
         if net_data:
-            filtered_data = self.data.loc[:, ['netflix_id', 'netflix_rating', 'imdbRating', 'Genre', 'Plot']]
+            filtered_data = self.data
         elif net_data == False:
             filtered_data = self.data.loc[:, ['imdbID', 'imdbRating','Genre', 'Plot']]
         for i, row in filtered_data.iterrows():
             df = df.append(self.unfold_by_column_value(row, column=column))
 
         self.expanse = df
+        if save == True and savepath:
+            df.to_csv(savepath + os.sep + 'EXPANSE.csv')
         return df
 
     def get_genre_dataframes(self):
@@ -269,7 +272,7 @@ class WordCleaner:
                 - List of filtered Dataframes.
         """
         if self.expanse.empty:
-            self.expanse = self.expand_df(self.data)
+            self.expanse = self.expand_df()
 
         genre_dfs = {g : self.expanse[self.expanse.Genre == g] for g in self.genre_list}
 
@@ -389,7 +392,7 @@ class WordCleaner:
         popdf = popdf[popdf['%_occurrence'] > threshold].sort_values('%_occurrence', ascending=False).reset_index()
         return popdf
 
-    def genres_to_popcsv(self, threshold=5, chosen_rating='netflix_rating', filepath='data/Word_Stats'):
+    def genres_to_popcsv(self, filepath, threshold=5, chosen_rating='netflix_rating'):
         """ Function designed to get the words stats of a given Dataframe filtered by genre up to a certain % of occurrence threshold.
             - Args:
                 - threshold: Minimum percentage of occurrence of a given word to be returned in the Dataframe.
@@ -400,43 +403,48 @@ class WordCleaner:
         """
         if self.genre_dfs == {}:
             self.genre_dfs = self.get_genre_dataframes()
+            print('Generating list of Dataframes by Genre...')
 
-        print('Generating list of Dataframes by Genre...')
         for genre in self.genre_list:
             try:
                 f = open(f'{filepath}/{genre}_stats.csv')
                 f.close()
+                print(f'{genre}_stats.csv already exists.')
             except:
                 print(f'Generating {genre} Dataframe...')
                 popdf = self.get_popdf(genre=genre, threshold=threshold, chosen_rating=chosen_rating, log=True)
-                popdf.to_csv(f'{filepath}/{genre}_stats.csv')
+                popdf.to_csv(filepath + os.sep + f'{genre}_stats.csv')
                 print(f'{genre}_stats.csv successfully saved.')
 
-    def join_genres(self):
+    def join_genres(self, wordpath):
         """ Simple function designed to join all existing word stats csv files into a single one.
         """
         res_df = pd.DataFrame(columns=['word', 'count', 'genres', 'title_occurrence', '%_occurrence', 'mean_rating'])
         for genre in self.genre_list:
             try:
-                f = open(f'data/Word_Stats/{genre}_stats.csv')
+                f = open(wordpath + os.sep + f'{genre}_stats.csv')
                 f.close()
-                df = pd.read_csv(f'data/Word_Stats/{genre}_stats.csv')
+                df = pd.read_csv(wordpath + os.sep + f'{genre}_stats.csv')
                 res_df = res_df.append(df)
             except:
                 continue
-        res_df.to_csv('data/WORD_STATS.csv')
+        res_df.to_csv(os.path.dirname(wordpath) + os.sep + 'WORD_STATS.csv')
 
 
 if __name__ == '__main__':
-    from folders_tb import add_path
+    """from folders_tb import add_path
     rootpath = add_path(4, jupyter=False)
     key_2 = 'a855df40'
     omdb = OmdbCleaner(omdb_net_path='data/OMDb General')
     #omdb.join_omdb(f'{rootpath}/EDA Project/data/OMDb General', files=11, save=True)
     omdb.omdb_to_csv(f'{rootpath}/EDA Project/data/IMDb_Clean_1.csv', 11000)
-    omdb.omdb_to_csv(f'{rootpath}/EDA Project/data/IMDb_Clean_1.csv', 12000, key=key_2)
+    omdb.omdb_to_csv(f'{rootpath}/EDA Project/data/IMDb_Clean_1.csv', 12000, key=key_2)"""
     """rootpath = add_path(4, jupyter=False)
     data = pd.read_csv(f'{rootpath}/EDA Project/MAIN_DATASET.csv')
     expanse = pd.read_csv(f'{rootpath}/EDA Project/GENRE_DATASET.csv')
     wcleaner = word_cleaner(data, expanse=expanse)
     print(wcleaner.get_popdf(genre='War', log=True))"""
+    rootpath = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+    base = pd.read_csv(rootpath + os.sep + 'data' + os.sep + 'BASE.csv')
+    wcleaner = WordCleaner(base)
+    wcleaner.expand_df()

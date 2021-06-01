@@ -10,8 +10,8 @@ sys.path.append(path)
 
 from utils.dashboard_tb import StreamFuncs
 
-data = pd.read_csv(os.path.dirname(path) + os.sep + 'data' + os.sep + 'MAIN_DATASET.csv')
-expanse = pd.read_csv(os.path.dirname(path) + os.sep + 'data' + os.sep + 'GENRE_DATASET.csv')
+data = pd.read_csv(os.path.dirname(path) + os.sep + 'data' + os.sep + 'BASE.csv')
+expanse = pd.read_csv(os.path.dirname(path) + os.sep + 'data' + os.sep + 'EXPANSE.csv')
 word_stats = pd.read_csv(os.path.dirname(path) + os.sep + 'data' + os.sep + 'WORD_STATS.csv')
 
 stream = StreamFuncs(data, expanse, word_stats)

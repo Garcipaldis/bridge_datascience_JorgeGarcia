@@ -93,28 +93,20 @@ class StreamFuncs:
     def flask_page(self):
         r = requests.get(url="http://localhost:6060/info?token_id=B53814652")
         response = r.json()
+        show_json = st.sidebar.checkbox('Show returned Json')
         df = pd.DataFrame(response).dropna()
-        df = df.iloc[:, [4, 2, 5, 20, 9, 13]]
-        
-        droplist = st.sidebar.selectbox('Order by:',
-                                options=['Netflix User Rating', 'IMDBb Rating', 'Year'])
-        ascending = st.sidebar.checkbox('Ascending')
-        if droplist == 'Netflix User Rating':
+        df.drop('Unnamed: 0', axis=1, inplace=True)
+        if show_json:
+            st.write(r.text)
+        else:
+            droplist = st.sidebar.selectbox('Order by:',
+                                    options=['netflix_rating', 'imdbRating', 'Metascore', 'number_of_votes','Year'])
+            ascending = st.sidebar.checkbox('Ascending')
             if ascending:
-                df.sort_values('netflix_rating', inplace=True)
+                df.sort_values(droplist, inplace=True)
             else:
-                df.sort_values('netflix_rating', inplace=True, ascending=False)
-        elif droplist == 'IMDBb Rating':
-            if ascending:
-                df.sort_values('imdbRating', inplace=True)
-            else:
-                df.sort_values('imdbRating', inplace=True, ascending=False)
-        elif droplist == 'Year':
-            if ascending:
-                df.sort_values('Year', inplace=True)
-            else:
-                df.sort_values('Year', inplace=True, ascending=False)
-        st.dataframe(df)
+                df.sort_values(droplist, inplace=True, ascending=False)
+            st.dataframe(df)
 
     def conclude(self):
         st.subheader('1. Was it possible to demonstrate the hypothesis? Why?')
@@ -130,5 +122,5 @@ class StreamFuncs:
                 Furthermore, the results would be more reliable if more data was gathered.
                 """)
         st.subheader('4. What did you learn doing this project?')
-        st.write("""Specify as much as possible the objective of the project and what is needed to reach that purpose.
+        st.write("""To specify as much as possible the objective of the project and what is needed to reach that purpose.
                 """)

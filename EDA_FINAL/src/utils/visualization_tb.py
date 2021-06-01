@@ -201,3 +201,21 @@ class Visualizer:
             plt.show()
             if save:
                 wordcloud.to_file(f'{genre}_cloud.png')
+
+    def timepie(self):
+        categories = {'Data Mining':50, 'Visualization':20, 'Flask':1, 'Streamlit':10, 'SQL': 3, 'Report Analysis':5}
+        pie, ax = plt.subplots(figsize=[10,6])
+        labels = categories.keys()
+        plt.pie(x=categories.values(), autopct="%.1f%%", labels=labels, pctdistance=0.5)
+        plt.title("Time spent per Project Step", fontsize=14)
+
+    def heatmap(self, data='base'):
+        
+        if data == 'expanse':
+            df = self.expanse.drop('Unnamed: 0', axis=1)
+        elif data == 'word_stats':
+            df = self.word_stats.drop(['Unnamed: 0', 'Unnamed: 0.1', 'index'], axis=1)
+        else:
+            df = self.data.drop('Unnamed: 0', axis=1)
+
+        sns.heatmap(df.corr(), annot=True).set(title=f'{data} Heatmap')
