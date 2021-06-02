@@ -1,0 +1,12 @@
+{
+    "project_name": "Netflix Titles Plot Popularity Detailed Analysis",
+    "author": "Jorge Garcia Navarro",
+    "linkedin": "https://www.linkedin.com/in/jorge-garc%C3%ADa-navarro-532674108",
+    "email": "jgn.sando@gmail.com",
+    "project_title": "Netflix Titles Plot Popularity Detailed Analysis",
+    "project_description": "Plot Analysis aiming to find the most popular words from each genre",
+    "flask_port": 6060,
+    "streamlit_port":8501,
+    "links": ["https://www.kaggle.com/netflix-inc/netflix-prize-data", "https://www.imdb.com/interfaces/", "http://www.omdbapi.com/"],
+    "python_libraries_used": ["numpy", "pandas", "streamlit", "flask", "plotly", "nltk", "kaleido", "wordcloud", "seaborn", "pymysql"]
+}

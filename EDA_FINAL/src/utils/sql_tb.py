@@ -4,11 +4,11 @@ import pymysql
 utils_path = os.path.dirname(os.path.dirname(__file__))
 sys.path.append(utils_path)
 
-from utils.folders_tb import read_json
+from utils.folders_tb import Folders
 
-settings_file = utils_path + os.sep + "utils" + os.sep + "sql_settings.json"
+settings_file = utils_path + os.sep + "utils" + os.sep + "settings_sql.json"
 
-json = read_json(fullpath=settings_file)
+json = Folders.read_json(fullpath=settings_file)
 
 IP_DNS = json["IP_DNS"]
 PORT = json["PORT"]

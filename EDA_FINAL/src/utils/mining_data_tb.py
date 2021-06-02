@@ -58,13 +58,14 @@ class OmdbCleaner:
 
         return net_data
 
-    def omdb_to_csv(self, filepath, savepath, row_start, row_num=999, key='7b2c6fff'):
+    def omdb_to_csv(self, key, filepath, savepath, row_start, row_num=999):
         """Function design to obtain dataframes by calling the OMDb API. Said API is returns IMDb stats for a certain title.
             - Args:
                 - filepath: .csv filepath containing the IMDb IDs of the desired titles (ej.'Net_Data_ID.csv').
                 - row_start: row from which to start sending API requests.
                 - row_num: Number of rows starting from row_start from which the API request is done.
                 - key: API key necessary in order to access the data. Obtained via: "http://www.omdbapi.com/apikey.aspx"
+                - savepath: filepath where to save the returning Dataframe.
             -Returns:
                 - Dataframe
         """

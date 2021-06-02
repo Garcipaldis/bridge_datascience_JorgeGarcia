@@ -5,15 +5,17 @@ class Folders:
 
     @staticmethod
     def read_json(fullpath):
+        """ Reads json file and returns it.
+        """
         with open(fullpath, "r") as json_file_readed:
             json_readed = json.load(json_file_readed)
         return json_readed
 
     @staticmethod
     def add_path(num, jupyter=True):
-        '''Función guardada para poder importar módulos desde otros .py (os.getcwd() si es ipynb).
+        '''Adds a path to sys.
         Args:
-            - num: indica el número de veces que se va a obtener la ruta superior.
+            - num: number of times to get the dirname until reaching the rootpath.
         '''
         if jupyter:
             dirpath = os.getcwd()

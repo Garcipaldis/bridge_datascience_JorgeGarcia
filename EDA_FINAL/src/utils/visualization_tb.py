@@ -217,6 +217,8 @@ class Visualizer:
                 wordcloud.to_file(save + os.sep + f'{genre}_cloud.png')
 
     def timepie(self, save=None):
+        """ Returns pie chart with Project Steps.
+        """
         categories = {'Data Mining':50, 'Visualization':20, 'Flask':1, 'Streamlit':10, 'SQL': 3, 'Reports and Documentation':7}
         pie, ax = plt.subplots(figsize=[10,6])
         labels = categories.keys()
@@ -226,7 +228,8 @@ class Visualizer:
             plt.savefig(save + os.sep + "Project_Steps.png")
 
     def heatmap(self, data='base', save=None):
-        
+        """ Returns heatmap of selected dataframe.
+        """
         if data == 'expanse':
             df = self.expanse.drop('Unnamed: 0', axis=1)
         elif data == 'word_stats':

@@ -13,3 +13,5 @@ raw.tsv
 
 #EDA
 EDA_FINAL/data
+EDA_FINAL/src/utils/settings_sql.json
+EDA_FINAL/src/utils/api_token.json
