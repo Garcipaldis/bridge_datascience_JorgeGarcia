@@ -10,8 +10,8 @@ The data was extracted from three separate sites:
 - IMDb official site Dataset: (title.basics.tsv.gz) https://www.imdb.com/interfaces/
 - OMDb API: http://www.omdbapi.com/
 
-## Example Graphs
-![Project Steps]("/reports/Project_Steps.png")
+## WordCloud
+![Romance Cloud](reports/Romance_cloud.png)
 
 For further information, please refer to the documentation folder.
 
