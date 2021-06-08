@@ -439,14 +439,5 @@ if __name__ == '__main__':
     key_2 = 'a855df40'
     omdb = OmdbCleaner(omdb_net_path='data/OMDb General')
     #omdb.join_omdb(f'{rootpath}/EDA Project/data/OMDb General', files=11, save=True)
-    omdb.omdb_to_csv(key, f'{rootpath}/EDA_FINAL/data/IMDb_Clean_1.csv', f'{rootpath}/EDA_Scrapping/data/OMDb General',13000)
-    omdb.omdb_to_csv(key_2, f'{rootpath}/EDA_FINAL/data/IMDb_Clean_1.csv',f'{rootpath}/EDA_Scrapping/data/OMDb General', 14000,)
-    """rootpath = add_path(4, jupyter=False)
-    data = pd.read_csv(f'{rootpath}/EDA Project/MAIN_DATASET.csv')
-    expanse = pd.read_csv(f'{rootpath}/EDA Project/GENRE_DATASET.csv')
-    wcleaner = word_cleaner(data, expanse=expanse)
-    print(wcleaner.get_popdf(genre='War', log=True))"""
-    """rootpath = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-    base = pd.read_csv(rootpath + os.sep + 'data' + os.sep + 'BASE.csv')
-    wcleaner = WordCleaner(base)
-    wcleaner.expand_df()"""
+    omdb.omdb_to_csv(key, f'{rootpath}/EDA_FINAL/data/IMDb_Clean_1.csv', f'{rootpath}/EDA_Scrapping/data/OMDb General',15000)
+    omdb.omdb_to_csv(key_2, f'{rootpath}/EDA_FINAL/data/IMDb_Clean_1.csv',f'{rootpath}/EDA_Scrapping/data/OMDb General', 16000,)
