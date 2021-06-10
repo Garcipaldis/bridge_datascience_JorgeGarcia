@@ -439,5 +439,5 @@ if __name__ == '__main__':
     key_2 = 'a855df40'
     omdb = OmdbCleaner(omdb_net_path='data/OMDb General')
     #omdb.join_omdb(f'{rootpath}/EDA Project/data/OMDb General', files=11, save=True)
-    omdb.omdb_to_csv(key, f'{rootpath}/EDA_FINAL/data/IMDb_Clean_1.csv', f'{rootpath}/EDA_Scrapping/data/OMDb General',15000)
-    omdb.omdb_to_csv(key_2, f'{rootpath}/EDA_FINAL/data/IMDb_Clean_1.csv',f'{rootpath}/EDA_Scrapping/data/OMDb General', 16000,)
+    omdb.omdb_to_csv(key, f'{rootpath}/EDA_FINAL/data/IMDb_Clean_1.csv', f'{rootpath}/EDA_Scrapping/data/OMDb General',19000)
+    omdb.omdb_to_csv(key_2, f'{rootpath}/EDA_FINAL/data/IMDb_Clean_1.csv',f'{rootpath}/EDA_Scrapping/data/OMDb General', 20000)
