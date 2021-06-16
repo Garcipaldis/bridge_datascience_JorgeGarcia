@@ -7,6 +7,25 @@ import time
 import numpy as np
 import pandas as pd
 
+# Columnas mejor correlacionadas en Dataframe.
+def get_redundant_pairs(df):
+    '''Get diagonal and lower triangular pairs of correlation matrix'''
+    pairs = {'Column_A':[], 'Column_B':[]}
+    cols = df.columns
+    for i in range(0, df.shape[1]):
+        for j in range(0, i+1):
+            pairs['Column_A'].append(cols[i])
+            pairs['Column_B'].append(cols[j])
+    return pairs
+
+def get_top_abs_correlations(df, n=5):
+    au_corr = df.corr().abs().unstack()
+    pairs = get_redundant_pairs(df)
+    tuple_pairs = list(zip(pairs['Column_A'], pairs['Column_B']))
+
+    au_corr = au_corr.drop(labels=tuple_pairs).sort_values(ascending=False)
+    return pd.DataFrame(au_corr[0:n], columns=['Correlation'])
+
 # Data Wrangling
 
 def omdb_to_csv(ruta, row_start, row_num=1000, key='7b2c6fff'):
