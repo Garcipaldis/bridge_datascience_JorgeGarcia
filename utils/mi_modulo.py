@@ -24,7 +24,9 @@ def get_top_abs_correlations(df, n=5):
     tuple_pairs = list(zip(pairs['Column_A'], pairs['Column_B']))
 
     au_corr = au_corr.drop(labels=tuple_pairs).sort_values(ascending=False)
-    return pd.DataFrame(au_corr[0:n], columns=['Correlation'])
+    df = pd.DataFrame(au_corr[0:n], columns=['Correlation'])
+    df.reset_index(inplace=True)
+    return df
 
 # Data Wrangling
 
