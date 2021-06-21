@@ -1,11 +1,68 @@
 import os, sys
 import random
 import itertools
-import json
+import warnings
 import requests
 import time
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
+
+from sklearn.model_selection import train_test_split, RepeatedKFold
+from sklearn.preprocessing import PolynomialFeatures
+
+#Cross-Validation
+def model_crossval_scores(X, y, model, splits=10, epochs=1, random_state=42, degree=False, plot=True, show_warnings=False):
+
+    if show_warnings == False:
+        warnings.filterwarnings('ignore')
+
+    scores = {'Epoch':[],'Iteration':[],'Train_Score':[], 'Val_Score':[]}
+    epoch = 1
+    iteration = 1
+
+    # Cross Validation Data Collection
+    if degree:
+        polinominal_model = PolynomialFeatures(degree) 
+        X = polinominal_model.fit_transform(X, y)
+    rkf = RepeatedKFold(n_splits=splits, n_repeats=epochs, random_state=random_state)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=random_state)
+
+    for train_index, val_index in rkf.split(X_train):
+
+        model.fit(X_train[train_index], y_train[train_index])
+        train_score = model.score(X_train[train_index], y_train[train_index])
+        val_score = model.score(X_train[val_index], y_train[val_index])
+
+        scores['Train_Score'].append(train_score)
+        scores['Val_Score'].append(val_score)
+        scores['Iteration'].append(iteration)
+        scores['Epoch'].append(epoch)
+        
+        iteration += 1
+        if iteration > splits:
+            iteration = 1
+            epoch += 1
+
+    # Epoch Plots
+    df = pd.DataFrame(scores, index=range(len(scores['Val_Score'])))
+
+    if plot:
+        for e in range(1, epochs+1):
+            x_plot = df[df.Epoch == e]['Iteration']
+            y_plot_train = df[df.Epoch == e]['Train_Score']
+            y_plot_val = df[df.Epoch == e]['Val_Score']
+            fig, ax = plt.subplots()
+            ax.plot(x_plot, y_plot_train, color='green', label='Train Score')
+            ax.plot(x_plot, y_plot_val, color='red', label='Val Score')
+            if degree:
+                plt.title(f'Poly deg:{degree} | Train/Val Score | Epoch: {e}')
+            else:
+                plt.title(f'{model} | Train/Val Score | Epoch: {e}')
+            ax.legend(loc='best')
+            plt.show()
+
+    return df
 
 # Columnas mejor correlacionadas en Dataframe.
 def get_redundant_pairs(df):
