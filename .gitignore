@@ -15,3 +15,6 @@ raw.tsv
 EDA_FINAL/data
 EDA_FINAL/src/utils/settings_sql.json
 EDA_FINAL/src/utils/api_token.json
+
+#ML_Scrapping
+ML_Scrapping/titles.tsv
