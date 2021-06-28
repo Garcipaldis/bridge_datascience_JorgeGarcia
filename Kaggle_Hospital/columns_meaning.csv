@@ -1,0 +1,19 @@
+Column,Description
+0,Case_ID registered in Hospital
+1,Unique code for the Hospital
+2,Unique code for the type of Hospital
+3,City Code of the Hospital
+4,Region Code of the Hospital
+5,Number of Extra rooms available in the Hospital
+6,Department overlooking the case
+7,Code for the Ward type
+8,Code for the Ward Facility
+9,Condition of Bed in the Ward
+10,Unique Patient Id
+11,City Code for the patient
+12,Admission Type registered by the Hospital
+13,Severity of the illness recorded at the time of admission
+14,Number of Visitors with the patient
+15,Age of the patient
+16,Deposit at the Admission Time
+17,Stay Days by the patient
