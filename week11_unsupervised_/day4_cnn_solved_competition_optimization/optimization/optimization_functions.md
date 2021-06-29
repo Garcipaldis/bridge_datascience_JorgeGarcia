@@ -1,0 +1,1 @@
+https://medium.com/@ashwin8april/optimization-algorithms-in-deep-learning-4f2c3b53f9f
