@@ -14,51 +14,50 @@ class CharacterPreprocessor:
             text += ' ' + q
         print("Corpus length:", len(text))
         
-        self.text = text.lower()
-        return text
-        
+        return text.lower()
 
     def preprocess(self, maxlen=40, step=3, column='quote'):
 
         self.maxlen = maxlen
 
         # Quote List
-        quotes = list(self.data[column])
+        input_list = list(self.data[column])
 
         # Corpus
-        self.get_corpus(quotes)
+        text = self.get_corpus(input_list)
 
         # Total Characters
-        chars = sorted(list(set(self.text)))
+        chars = sorted(list(set(text)))
         print("Total chars:", len(chars))
-        self.chars = chars
 
         # Dictionaries
         char_indices = dict((c, i) for i, c in enumerate(chars))
         indices_char = dict((i, c) for i, c in enumerate(chars))
-        self.char_indices = char_indices
-        self.indices_char = indices_char
 
         # Number of sequences
         sentences = []
         next_chars = []
-        for i in range(0, len(self.text) - maxlen, step):
-            sentences.append(self.text[i : i + maxlen])
-            next_chars.append(self.text[i + maxlen])
+        for i in range(0, len(text) - maxlen, step):
+            sentences.append(text[i : i + maxlen])
+            next_chars.append(text[i + maxlen])
         print("Number of sequences:", len(sentences))
 
         # Defining X and y
-        x = np.zeros((len(sentences), maxlen, len(chars)), dtype=np.bool)
-        y = np.zeros((len(sentences), len(chars)), dtype=np.bool)
+        x = np.zeros((len(sentences), maxlen, len(chars)))
+        y = np.zeros((len(sentences), len(chars)))
         for i, sentence in enumerate(sentences):
             for t, char in enumerate(sentence):
                 x[i, t, char_indices[char]] = 1
             y[i, char_indices[next_chars[i]]] = 1
 
+        self.text = text
+        self.chars = chars
+        self.char_indices = char_indices
+        self.indices_char = indices_char
+        self.sentences = sentences
+        self.next_chars = next_chars
         self.X = x
         self.Y = y
-
-        return x, y
 
     def sample(self, preds, temperature=1.0):
         # helper function to sample an index from a probability array
@@ -69,25 +68,56 @@ class CharacterPreprocessor:
         probas = np.random.multinomial(1, preds, 1)
         return np.argmax(probas)
 
-    def generate(self, model, quote_len=400, temperature=1.0):
+    def generate(self, model, quote_len=40, sentence=False, temperature=1.0, verbose=False, fake=False):
         
-        print("...Temperature:", temperature)
+        if verbose:
+            print("...Temperature:", temperature)
 
         generated = ""
-        start_index = random.randint(0, len(self.text) - self.maxlen - 1)
-        sentence = self.text[start_index : start_index + self.maxlen]
-        print('...Generating with seed: "' + sentence + '"')
+        if fake == True:
+            sentence = random.choices(self.chars, k=self.maxlen)
+            sentence = ''.join(sentence)
+        elif sentence == False:
+            start_index = random.randint(0, len(self.text) - self.maxlen - 1)
+            sentence = self.text[start_index : start_index + self.maxlen]
+        if verbose:
+            print('...Generating with seed: "' + sentence + '"')
 
         for i in range(quote_len):
             x_pred = np.zeros((1, self.maxlen, len(self.chars)))
             for t, char in enumerate(sentence):
-                x_pred[0, t, self.char_indices[char]] = 1.0
+                x_pred[0, t, self.char_indices[char]] = 1.0 #One-Hot Array
             preds = model.predict(x_pred, verbose=0)[0]
             next_index = self.sample(preds, temperature)
             next_char = self.indices_char[next_index]
             sentence = sentence[1:] + next_char
             generated += next_char
 
-        print("...Generated: ", generated)
+        if verbose:
+            print("...Generated: ", generated)
 
         return generated
+
+    def generate_fake_samples(self, model, n_samples, quote_len=40, temperature=1.0):
+
+        x_random = []
+        for n in range(n_samples):
+            x_random.append(self.generate(model, quote_len=quote_len, temperature=temperature, fake=True))
+
+        X_fake = np.zeros((len(x_random), self.maxlen, len(self.chars)))
+        for i, sentence in enumerate(x_random):
+            for t, char in enumerate(sentence):
+                X_fake[i, t, self.char_indices[char]] = 1
+
+        X_fake = X_fake.reshape(X_fake.shape[0], X_fake.shape[1], X_fake.shape[2], 1)
+        y_fake = np.zeros(n_samples)
+
+        return X_fake, y_fake
+
+    def generate_real_samples(self, n_samples):
+
+        X_true = np.array(random.sample(list(self.X), n_samples))
+        X_true = X_true.reshape(X_true.shape[0], X_true.shape[1], X_true.shape[2], 1)
+        y_true = np.ones(n_samples)
+
+        return X_true, y_true
