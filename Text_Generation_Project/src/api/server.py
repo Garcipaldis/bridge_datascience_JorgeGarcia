@@ -1,22 +1,30 @@
 import os
 import sys
+import pandas as pd
 from flask import Flask, request
 import argparse
+
+from numpy.core.numeric import full
 
 src_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(src_path)
 
 from utils.folders_tb import Folders
-from utils.apis_tb import JsonClass
+from utils.apis_tb import FlaskFuncs
 
 fullpath = os.path.dirname(src_path) + os.sep + 'data' + os.sep + 'BASE.csv'
 app = Flask(__name__)
 
-@app.route('/predict', methods=['GET'])  # http://localhost:6060/info?token_id=B53814652
+df = pd.read_csv(fullpath)
+funcs = FlaskFuncs(df)
+
+@app.route('/predict', methods=['GET'])  # http://localhost:6060/predict?token_id=B53814652&model=Base_Quote_Generator.h5&sentence=quote
 def give_id():
-    x = request.args['token_id']
+    x = request.args['token_id', 'model', 'sentence']
+    model = request.args('model')
+    string = request.args('sentence')
     if x == "B53814652":
-        pass #TO-DO: Añadir función de predicciones
+        funcs.get_predicction(model, string, temperature=0.2)
     else:
         return "Invalid Token ID"
 
@@ -29,10 +37,7 @@ def give_id():
         return "Invalid Token ID"
 
 
-def main(x):
-    if x != 'Jorge':
-        print('Wrong password')
-        return False
+def main():
     print("---------STARTING PROCESS---------")
     print(__file__)
     
@@ -62,4 +67,7 @@ if __name__ == "__main__":
     parser.add_argument("-x", "--x", type=str, help="password")
     args = vars(parser.parse_args())
     x = args['x']
-    main(x)
+    if x != 'Jorge':
+        print('Wrong password')
+    else:
+        main()
