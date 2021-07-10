@@ -4,35 +4,44 @@ import pandas as pd
 from flask import Flask, request
 import argparse
 
-from numpy.core.numeric import full
+root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(root)
 
-src_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(src_path)
+from src.utils.folders_tb import Folders
+from src.utils.apis_tb import FlaskFuncs
 
-from utils.folders_tb import Folders
-from utils.apis_tb import FlaskFuncs
-
-fullpath = os.path.dirname(src_path) + os.sep + 'data' + os.sep + 'BASE.csv'
+settings_file = root + os.sep + 'src' + os.sep + "utils" + os.sep + "settings_sql.json"
+dfpath = root + os.sep + 'data' + os.sep + 'BASE.csv'
 app = Flask(__name__)
 
-df = pd.read_csv(fullpath)
-funcs = FlaskFuncs(df)
+df = pd.read_csv(dfpath)
+funcs = FlaskFuncs(df, root, settings_file)
 
-@app.route('/predict', methods=['GET'])  # http://localhost:6060/predict?token_id=B53814652&model=Base_Quote_Generator.h5&sentence=quote
-def give_id():
-    x = request.args['token_id', 'model', 'sentence']
-    model = request.args('model')
-    string = request.args('sentence')
-    if x == "B53814652":
-        funcs.get_predicction(model, string, temperature=0.2)
-    else:
-        return "Invalid Token ID"
-
-@app.route('/insert-sql', methods=['GET'])  # http://localhost:6060/info?token_id=B53814652
+@app.route('/info', methods=['GET'])  # http://localhost:6060/info?token_id=B53814652
 def give_id():
     x = request.args['token_id']
     if x == "B53814652":
-        pass #TO-DO: Añadir función para insertar en SQL.
+        return funcs.give_json()
+    else:
+        return "Invalid Token ID"
+
+@app.route('/predict', methods=['GET'])  # http://localhost:6060/predict?token_id=B53814652&model=Base_Quote_LSTM.h5&sentence=0
+def predict():
+    x = request.args['token_id']
+    model = request.args['model']
+    string = request.args['sentence']
+    if string == '0':
+        string = False
+    if x == "B53814652":
+        return funcs.get_predicction(model, string, temperature=0.3)
+    else:
+        return "Invalid Token ID"
+
+@app.route('/insert-sql', methods=['GET'])  # http://localhost:6060/insert-sql?token_id=B53814652
+def insert_mysql():
+    x = request.args['token_id']
+    if x == "B53814652":
+        return funcs.insert_df_to_mysql()
     else:
         return "Invalid Token ID"
 

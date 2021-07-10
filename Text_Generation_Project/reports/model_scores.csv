@@ -1,0 +1,6 @@
+,model,parameters,loss,rmse,accuracy
+0,Character_LSTM,"Character-level, Simple LSTM layer, categorical crossentropy, RMSProp",1.3114,0.0992,0.0
+1,Word_LSTM,"Word-level, Simple LSTM layer, categorical crossentropy, RMSProp",1.3694,0.0063,0.0
+2,Bidirectional_LSTM,"Character-level, Bidirectional LSTM layer, categorical crossentropy, RMSProp",1.4187,0.1023,0.0
+3,Character_GAN,"Character-level, Dense-LeakyRelu-BatchNormalization generator, convolutional discriminator",0.1565,0.0,0.9435
+4,Word_GAN,"Word-level, Dense-LeakyRelu-BatchNormalization generator, convolutional discriminator",0.0005,0.0,1.0

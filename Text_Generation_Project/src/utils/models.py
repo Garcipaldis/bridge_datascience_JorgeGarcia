@@ -1,193 +1,102 @@
+import os, sys
 import numpy as np
 import random
-import re
-import string
 
 from tensorflow import keras
 from tensorflow.keras import layers
 from tensorflow.keras.optimizers import Adam, RMSprop
 
-class Preprocessor:
+root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(root)
 
-    def __init__(self, df):
-        self.data = df
+from src.utils.mining_data_tb import Preprocessor
 
-    def get_corpus(self, quote_list):
-        # Corpus
-        text = ''
-        for q in quote_list:
-            text += ' ' + q
-        print("Corpus length:", len(text))
-        
-        return text.lower()
+###########################################################################################################################################
 
+class LSTM_Generator(Preprocessor):
 
-    def preprocess(self, maxlen=40, step=3, column='quote', option='character', mode='base', min_word_frequency=2):
-
+    def __init__(self, df, maxlen=40, step=3, option='character', min_word_frequency=2, model_type=1):
+        Preprocessor.__init__(self, df)
         self.maxlen = maxlen
+        self.step = step
+        self.option = option
 
-        # Quote List
-        input_list = list(self.data[column])
+        self.preprocess(maxlen=self.maxlen, step=self.step, option=option, mode='base', min_word_frequency=min_word_frequency)
 
-        # Corpus
-        text = self.get_corpus(input_list)
+        self.model = self.base_model(model_type=model_type)
 
-        sequences = []
-        next_tokens = []
+    def base_model(self, model_type=1):
 
-        if option == 'character':
-            # Total Characters
-            tokens = sorted(list(set(text)))
-            print("Total chars:", len(tokens))
+        if model_type == 1:
+            model = keras.Sequential([
+                layers.InputLayer(input_shape=(self.maxlen, len(self.tokens))),
+                layers.LSTM(128),
+                layers.Dense(len(self.tokens), activation="softmax")
+            ])
 
-            # Dictionaries
-            token_indices = dict((c, i) for i, c in enumerate(tokens))
-            indices_token = dict((i, c) for i, c in enumerate(tokens))
+        if model_type == 2:
+            model = keras.Sequential([
+                layers.InputLayer(input_shape=(self.maxlen, len(self.tokens))),
+                layers.Bidirectional(layers.LSTM(128)),
+                layers.LeakyReLU(alpha=0.3),
+                layers.Dropout(0.3),
+                layers.Dense(len(self.tokens), activation="softmax")
+            ])
 
-        elif option == 'word':
-            # Clean Text
-            text = re.sub('<br />', ' ', text)
-                # replace '--' with a space ' '
-            doc = text.replace('--', ' ')
-                # split into tokens by white space
-            text_in_words = doc.split()
-                # remove punctuation from each token
-            table = str.maketrans('', '', string.punctuation)
-            text_in_words = [w.translate(table) for w in text_in_words]
-                # remove '' strings
-            pops = [[seq.pop(i) for i, w in enumerate(seq) if w == '' or w == ' '] for seq in text_in_words]
-                # remove remaining tokens that are not alphabetic
-            text_in_words = [word for word in text_in_words if word.isalpha()]
-            print("Total words:", len(text_in_words))
-            self.text_in_words = text_in_words
+        model.summary()
+        optimizer = RMSprop(learning_rate=0.01)
+        model.compile(loss="categorical_crossentropy", optimizer=optimizer, metrics=["RootMeanSquaredError"])
 
-            # Calculate word frequency
-            word_freq = {}
-            for word in text_in_words:
-                word_freq[word] = word_freq.get(word, 0) + 1
 
-            ignored_words = set()
-            for k, v in word_freq.items():
-                if word_freq[k] < min_word_frequency:
-                    ignored_words.add(k)
+        return model
 
-            words = set(text_in_words)
-            print('Unique words before ignoring:', len(words))
-            print('Ignoring words with frequency <', min_word_frequency)
-            tokens = sorted(set(words) - ignored_words)
-            print('Unique words after ignoring:', len(tokens))
+    def train(self, epochs=1, batch_size=128):
 
-            # Dictionaries
-            token_indices = dict((c, i) for i, c in enumerate(tokens))
-            indices_token = dict((i, c) for i, c in enumerate(tokens))
+        print(f'Training {self.option} LSTM model for [epochs:{epochs}, batch_size:{batch_size}]')
+        self.model.fit(self.X, self.Y, batch_size=batch_size, epochs=epochs)
+        print('Finished training.')
 
-        # Saving variables
-        self.text = text
-        self.tokens = tokens
-        self.token_indices = token_indices
-        self.indices_token = indices_token
+    def predict(self, option='character', quote_len=40, sentence=False, temperature=1.0, verbose=False):
 
-        if mode == 'base':
-            if option == 'character':
-                for i in range(0, len(text) - maxlen, step):
-                    sequences.append(text[i : i + maxlen])
-                    next_tokens.append(text[i + maxlen])
-            # In case of word-preprocessing, only add sequences where no word is in ignored_words
-            elif option == 'word':
-                for i in range(0, len(text_in_words) - maxlen, step):
-                    if len(set(text_in_words[i: i+ maxlen + 1]).intersection(ignored_words)) == 0:
-                        sequences.append(text_in_words[i : i + maxlen])
-                        next_tokens.append(text_in_words[i + maxlen])
-            print("Number of sequences:", len(sequences))
+        prediction = self.generate(self.model, mode='base', option=option, quote_len=quote_len, 
+                                    sentence=sentence, temperature=temperature, verbose=verbose)
 
-            # Defining X and y
-            x = np.zeros((len(sequences), maxlen, len(tokens)))
-            y = np.zeros((len(sequences), len(tokens)))
-            for i, sentence in enumerate(sequences):
-                for t, char in enumerate(sentence):
-                    x[i, t, token_indices[char]] = 1
-                y[i, token_indices[next_tokens[i]]] = 1
+        return prediction
 
-        elif mode == 'gan':
-            if option == 'character':
-                for i in range(0, len(text) - 2*maxlen, step):
-                    sequences.append(text[i : i + maxlen])
-                    next_tokens.append(text[i + maxlen:i + 2*maxlen])
-            # In case of word-preprocessing, only add sequences where no word is in ignored_words
-            elif option == 'word':
-                for i in range(0, len(text_in_words) - 2*maxlen, step):
-                    if len(set(text_in_words[i: i+ 2*maxlen + 1]).intersection(ignored_words)) == 0:
-                        sequences.append(text_in_words[i : i + maxlen])
-                        next_tokens.append(text_in_words[i + maxlen:i + 2*maxlen])
-            print("Number of sequences:", len(sequences))
+    def save_model(self, filepath):
 
-            # Defining X and y
-            x = np.zeros((len(sequences), maxlen, len(tokens)))
-            y = np.zeros((len(sequences), maxlen, len(tokens)))
-            for i, sentence in enumerate(sequences):
-                for t, char in enumerate(sentence):
-                    x[i, t, token_indices[char]] = 1
-                    y[i, t, token_indices[next_tokens[i][t]]] = 1
+        self.model.save(filepath)
+        print('Model saved.')
 
-        self.sequences = sequences
-        self.next_tokens = next_tokens
-        self.X = x
-        self.Y = y
+###########################################################################################################################################
 
-    def sample(self, preds, temperature=1.0):
-        # helper function to sample an index from a probability array
-        preds = np.asarray(preds).astype("float64")
-        preds = np.log(preds) / temperature
-        exp_preds = np.exp(preds)
-        preds = exp_preds / np.sum(exp_preds)
-        probas = np.random.multinomial(1, preds, 1)
-        return np.argmax(probas)
+class GAN(Preprocessor):
 
-    def generate(self, model, mode='base', option='character', quote_len=40, sentence=False, temperature=1.0, verbose=False):
+    def __init__(self, df, maxlen=40, step=3, option='character', min_word_frequency=2):
+        Preprocessor.__init__(self, df)
+        self.maxlen = maxlen
+        self.step = step
+        self.option = option
+        self.disc_loss = []
+        self.gen_loss = []
+
+        self.preprocess(maxlen=self.maxlen, step=self.step, option=option, mode='gan', min_word_frequency=min_word_frequency)
         
-        if verbose:
-            print("...Temperature:", temperature)
+        optimizer = Adam(learning_rate=0.0002)
 
-        generated = ""
-        if sentence == False:
-            start_index = random.randint(0, len(self.text) - self.maxlen - 1)
-            sentence = self.text[start_index : start_index + self.maxlen]
-        if verbose:
-            print('...Generating with seed: "' + sentence + '"')
+        # Build and compile the discriminator
+        self.discriminator = self.build_discriminator()
+        self.discriminator.compile(loss='binary_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 
-        if mode == 'base':
-            for i in range(quote_len):
-                x_pred = np.zeros((1, self.maxlen, len(self.tokens)))
-                for t, char in enumerate(sentence):
-                    x_pred[0, t, self.token_indices[char]] = 1.0 #One-Hot Array
-                preds = model.predict(x_pred, verbose=0)[0]
-                next_index = self.sample(preds, temperature)
-                next_char = self.indices_token[next_index]
-                if option == 'character':
-                    sentence = sentence[1:] + next_char
-                    generated += next_char
-                elif option == 'word':
-                    sentence = sentence[1:]
-                    sentence.append(next_char)
-                    generated += next_char + ' '
+        # Build the generator
+        self.generator = self.build_generator()
 
-        elif mode == 'gan':
-            x_pred = np.zeros((1, self.maxlen, len(self.tokens)))
-            for t, char in enumerate(sentence):
-                x_pred[0, t, self.token_indices[char]] = 1.0 #One-Hot Array
-            preds = model.predict(x_pred, verbose=0)[0]
-            for pred in list(preds):
-                next_index = self.sample(pred, temperature=1)
-                next_char = self.indices_token[next_index]
-                if option == 'character':
-                    generated += next_char
-                elif option == 'word':
-                    generated += next_char + ' '
+        # For the combined model we will only train the generator
+        self.discriminator.trainable = False
 
-        if verbose:
-            print("...Generated: ", generated)
-
-        return generated
+        # Build the GAN Model
+        self.gan = self.build_gan(self.generator, self.discriminator)
+        self.gan.compile(loss='binary_crossentropy', optimizer=optimizer)
 
     def get_latent_points(self, n_samples):
 
@@ -226,159 +135,42 @@ class Preprocessor:
 
         return X_gan, y_gan
 
-class LSTM_Generator(Preprocessor):
+    def build_discriminator(self):
 
-    def __init__(self, df, maxlen=40, step=3, option='character', min_word_frequency=2):
-        Preprocessor.__init__(self, df)
-        self.maxlen = maxlen
-        self.step = step
-
-        self.preprocess(maxlen=self.maxlen, step=self.step, option=option, mode='base', min_word_frequency=min_word_frequency)
-
-        self.model = self.base_model()
-
-    def base_model(self):
-        model = keras.Sequential([
-            layers.InputLayer(input_shape=(self.maxlen, len(self.tokens))),
-            layers.LSTM(128),
-            layers.Dense(len(self.tokens), activation="softmax")
+        discriminator = keras.Sequential([
+            layers.Conv1D(filters=len(self.tokens), kernel_size=(3), input_shape=(self.maxlen, len(self.tokens)), padding='same'),
+            layers.LeakyReLU(alpha=0.2),
+            layers.Dropout(0.2),
+            layers.Conv1D(filters=len(self.tokens), kernel_size=(3), input_shape=(self.maxlen, len(self.tokens)), padding='same'),
+            layers.LeakyReLU(alpha=0.2),
+            layers.Dropout(0.2),
+            layers.Conv1D(filters=len(self.tokens), kernel_size=(3), input_shape=(self.maxlen, len(self.tokens)), padding='same'),
+            layers.LeakyReLU(alpha=0.2),
+            layers.Dropout(0.2),
+            layers.Dense(1, activation='sigmoid')
         ])
 
-        model.summary()
-        optimizer = RMSprop(learning_rate=0.01)
-        model.compile(loss="categorical_crossentropy", optimizer=optimizer)
-
-        return model
-
-    def predict(self, option='character', quote_len=40, sentence=False, temperature=1.0, verbose=False):
-        
-        if sentence:
-            if option == 'character':
-                sentence = sentence[:quote_len]
-            elif option == 'word':
-                sentence = sentence.lower()
-                sentence = sentence.replace('--', ' ')
-                # split into tokens by white space
-                text_in_words = sentence.split()
-                # remove punctuation from each token
-                table = str.maketrans('', '', string.punctuation)
-                text_in_words = [w.translate(table) for w in text_in_words]
-                pops = [[seq.pop(i) for i, w in enumerate(seq) if w == '' or w == ' '] for seq in text_in_words]
-                # remove remaining tokens that are not alphabetic
-                sentence = [word for word in text_in_words if word.isalpha()][:quote_len]
-
-        prediction = self.generate(self.model, mode='base', option=option, quote_len=quote_len, 
-                                    sentence=sentence, temperature=temperature, verbose=verbose)
-
-        return prediction
-
-class GAN(Preprocessor):
-
-    def __init__(self, df, maxlen=40, step=3, option='character', min_word_frequency=2, model_type=1):
-        Preprocessor.__init__(self, df)
-        self.maxlen = maxlen
-        self.step = step
-
-        self.preprocess(maxlen=self.maxlen, step=self.step, option=option, mode='gan', min_word_frequency=min_word_frequency)
-        
-        optimizer = Adam(learning_rate=0.0002)
-
-        # Build and compile the discriminator
-        self.discriminator = self.build_discriminator(mode=model_type)
-        self.discriminator.compile(loss='binary_crossentropy', optimizer=optimizer, metrics=['accuracy'])
-
-        # Build the generator
-        self.generator = self.build_generator(mode=model_type)
-
-        # For the combined model we will only train the generator
-        self.discriminator.trainable = False
-
-        # Build the GAN Model
-        self.gan = self.build_gan(self.generator, self.discriminator)
-        self.gan.compile(loss='binary_crossentropy', optimizer=optimizer)
-
-    def build_discriminator(self, mode=1):
-
-        if mode == 1:
-            discriminator = keras.Sequential([
-                keras.layers.InputLayer(input_shape=(self.maxlen, len(self.tokens))),
-                layers.LSTM(128),
-                keras.layers.Dense(1, activation='sigmoid')
-            ])
-            discriminator.summary()
-
-        elif mode == 2:
-            discriminator = keras.Sequential([
-                layers.Conv1D(filters=len(self.tokens),
-                                    kernel_size=(3),
-                                    input_shape=(self.maxlen, len(self.tokens)),
-                                    padding='same'),
-                layers.Dropout(0.25),
-                layers.Dense(128),
-                layers.LeakyReLU(alpha=0.3),
-                layers.Dense(1, activation='sigmoid')
-            ])
-
-            discriminator.summary()
-
-        elif mode == 3:
-            discriminator = keras.Sequential([
-                layers.Conv1D(filters=len(self.tokens), kernel_size=(3), input_shape=(self.maxlen, len(self.tokens)), padding='same'),
-                layers.LeakyReLU(alpha=0.2),
-                layers.Dropout(0.2),
-                layers.Conv1D(filters=len(self.tokens), kernel_size=(3), input_shape=(self.maxlen, len(self.tokens)), padding='same'),
-                layers.LeakyReLU(alpha=0.2),
-                layers.Dropout(0.2),
-                layers.Conv1D(filters=len(self.tokens), kernel_size=(3), input_shape=(self.maxlen, len(self.tokens)), padding='same'),
-                layers.LeakyReLU(alpha=0.2),
-                layers.Dropout(0.2),
-                layers.Dense(1, activation='sigmoid')
-            ])
-
-            discriminator.summary()
+        discriminator.summary()
 
         return discriminator
 
-    def build_generator(self, mode=1):
-        
-        if mode == 1:
-            generator = keras.Sequential([
-                layers.InputLayer(input_shape=(self.maxlen, len(self.tokens))),
-                layers.LSTM(128, return_sequences=True),
-                layers.Dense(len(self.tokens), activation='softmax'),
-            ])
-            generator.summary()
+    def build_generator(self):
 
-        elif mode == 2:
-            generator = keras.Sequential([
-                layers.Conv1D(filters=len(self.tokens),
-                                    kernel_size=(3),
-                                    input_shape=(self.maxlen, len(self.tokens)),
-                                    padding='same'),
-                layers.Dropout(0.25),
-                layers.Dense(128),
-                layers.LeakyReLU(alpha=0.3),
-                layers.Dense(len(self.chars), activation='softmax')
-            ])
+        generator = keras.Sequential([
+            layers.Dense((len(self.tokens)), input_shape=(self.maxlen, len(self.tokens))),
+            layers.LeakyReLU(alpha=0.2),
+            layers.BatchNormalization(momentum=0.8),
+            layers.Dense(512),
+            layers.LeakyReLU(alpha=0.2),
+            layers.BatchNormalization(momentum=0.8),
+            layers.Dense(len(self.tokens)),
+            layers.LeakyReLU(alpha=0.2),
+            layers.BatchNormalization(momentum=0.8),
+            layers.Reshape((self.maxlen, len(self.tokens))),
+            layers.Conv1DTranspose(len(self.tokens), 2, padding="same", activation='softmax')
+        ])
 
-            generator.summary()
-
-        elif mode == 3:
-            generator = keras.Sequential([
-                layers.Dense((len(self.tokens)), input_shape=(self.maxlen, len(self.tokens))),
-                layers.LeakyReLU(alpha=0.2),
-                layers.BatchNormalization(momentum=0.8),
-                layers.Dense(512),
-                layers.LeakyReLU(alpha=0.2),
-                layers.BatchNormalization(momentum=0.8),
-                layers.Dense(len(self.tokens)),
-                layers.LeakyReLU(alpha=0.2),
-                layers.BatchNormalization(momentum=0.8),
-                layers.Reshape((self.maxlen, len(self.tokens))),
-                layers.Conv1DTranspose(len(self.tokens), 2, padding="same", activation='softmax')
-            ])
-
-            generator.summary()
+        generator.summary()
 
         return generator
 
@@ -438,23 +230,20 @@ class GAN(Preprocessor):
                     self.gen_loss.append(g_loss)
 
     def predict(self, option='character', quote_len=40, sentence=False, temperature=1.0, verbose=False):
-        
-        if sentence:
-            if option == 'character':
-                sentence = sentence[:quote_len]
-            elif option == 'word':
-                sentence = sentence.lower()
-                sentence = sentence.replace('--', ' ')
-                # split into tokens by white space
-                text_in_words = sentence.split()
-                # remove punctuation from each token
-                table = str.maketrans('', '', string.punctuation)
-                text_in_words = [w.translate(table) for w in text_in_words]
-                pops = [[seq.pop(i) for i, w in enumerate(seq) if w == '' or w == ' '] for seq in text_in_words]
-                # remove remaining tokens that are not alphabetic
-                sentence = [word for word in text_in_words if word.isalpha()][:quote_len]
 
         prediction = self.generate(self.generator, mode='gan', option=option, quote_len=quote_len, 
                                     sentence=sentence, temperature=temperature, verbose=verbose)
 
         return prediction
+
+    def get_mean_scores(self):
+        # Mean Loss and Accuracy for real and fake samples
+        gan_loss = (self.disc_loss[-1][0][0] + self.disc_loss[-1][1][0])/2
+        gan_acc = (self.disc_loss[-1][0][1] + self.disc_loss[-1][1][1])/2
+
+        return gan_loss, gan_acc
+
+    def save_model(self, filepath):
+
+        self.generator.save(filepath)
+        print('GAN Generator model saved.')

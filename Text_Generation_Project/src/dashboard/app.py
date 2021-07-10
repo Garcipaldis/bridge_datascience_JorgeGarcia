@@ -4,17 +4,15 @@ import os, sys
 
 # TESTING: python -m streamlit run D:\Documentos\TheBridge\bridge_datascience_JorgeGarcia\Text_Generation_Project\src\dashboard\app.py
 
-path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(root)
 
-sys.path.append(path)
+from src.utils.dashboard_tb import StreamFuncs
 
-from utils.dashboard_tb import StreamFuncs
+dfpath = root + os.sep + 'data' + os.sep + 'BASE.csv'
+df = pd.read_csv(dfpath)
 
-data = pd.read_csv(os.path.dirname(path) + os.sep + 'data' + os.sep + 'BASE.csv')
-expanse = pd.read_csv(os.path.dirname(path) + os.sep + 'data' + os.sep + 'EXPANSE.csv')
-word_stats = pd.read_csv(os.path.dirname(path) + os.sep + 'data' + os.sep + 'WORD_STATS.csv')
-
-stream = StreamFuncs(data, expanse, word_stats)
+stream = StreamFuncs(df, root)
 
 df = None
 st.set_option('deprecation.showPyplotGlobalUse', False)
@@ -23,13 +21,13 @@ menu = st.sidebar.selectbox('Menu:',
             options=["Welcome", "Visualization", "JSON API-Flask", "Model Prediction", "Models From SQL Database", "Conclusions"])
 
 if menu == 'Welcome':
-    pass
+    stream.greet()
 
 if menu == 'Visualization':
-    pass
+    stream.barchart_page()
 
 if menu == 'JSON API-Flask':
-    pass
+    stream.flask_page()
 
 if menu == 'Model Prediction':
     pass
