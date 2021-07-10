@@ -224,7 +224,7 @@ class Preprocessor:
                 text_in_words = [w.translate(table) for w in text_in_words]
                 pops = [[seq.pop(i) for i, w in enumerate(seq) if w == '' or w == ' '] for seq in text_in_words]
                 # remove remaining tokens that are not alphabetic
-                sentence = [word for word in text_in_words if word.isalpha()][:quote_len]
+                sentence = [word for word in text_in_words if word.isalpha()][:self.maxlen]
 
         generated = ""
         if sentence == False:

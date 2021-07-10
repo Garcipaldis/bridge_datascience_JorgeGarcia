@@ -44,7 +44,7 @@ class Visualizer(Preprocessor):
             - show_labels: Shows value on each bar. Only set to True if the y-axis contains the numeric values. 
         """
 
-        df = self.word_pop
+        df = self.get_word_popularity()
 
         if sort == 0:
             data = df.sort_values(x, ascending=False).head(top)

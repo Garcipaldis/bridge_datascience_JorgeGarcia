@@ -2,6 +2,7 @@ import pandas as pd
 import os, sys
 from tensorflow import keras
 from sqlalchemy import create_engine
+import pymysql
 
 root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.append(root)
@@ -31,26 +32,26 @@ class FlaskFuncs(Preprocessor, Folders):
 
     def get_predicction(self, model, string=False, quote_len=40, temperature=1):
         
-        if model == 'Base_Quote_LSTM.h5' or model == 'Bidirectional_LSTM':
+        if model == '1_Base_Quote_LSTM.h5' or model == '3_Bidirectional_LSTM.h5':
             self.preprocess(option='character', mode='base')
             selection = self.models[model]
             return self.generate(selection, option='character', mode='base', 
                                 quote_len=quote_len, sentence=string, temperature=temperature)
 
-        elif model == 'Word_Base_LSTM.h5':
-            self.preprocess(option='word', mode='base')
+        elif model == '2_Word_Base_LSTM.h5':
+            self.preprocess(option='word', mode='base', maxlen=5)
             selection = self.models[model]
             return self.generate(selection, option='word', mode='base', 
                                 quote_len=quote_len, sentence=string, temperature=temperature)
 
-        elif model == 'Char_GAN.h5':
+        elif model == '4_Char_GAN.h5':
             self.preprocess(option='character', mode='gan')
             selection = self.models[model]
             return self.generate(selection, option='character', mode='gan', 
                                 quote_len=quote_len, sentence=string, temperature=temperature)
 
-        elif model == 'Word_GAN.h5':
-            self.preprocess(option='word', mode='gan')
+        elif model == '5_Word_GAN.h5':
+            self.preprocess(option='word', mode='gan', maxlen=5)
             selection = self.models[model]
             return self.generate(selection, option='word', mode='gan', 
                                 quote_len=quote_len, sentence=string, temperature=temperature)
@@ -82,6 +83,38 @@ class FlaskFuncs(Preprocessor, Folders):
         """ Reads a csv file with pandas and returns a json.
         """
         return self.data.to_json()
+
+    def connect(self):
+        # Open database connection
+        self.db = pymysql.connect(host=self.IP_DNS,
+                                user=self.USER, 
+                                password=self.PASSWORD, 
+                                database=self.BD_NAME, 
+                                port=self.PORT)
+        # prepare a cursor object using cursor() method
+        self.cursor = self.db.cursor()
+        print("Connected to MySQL server [" + self.BD_NAME + "]")
+        return self.db
+
+    def close(self):
+        # disconnect from server
+        self.db.close()
+        print("Close connection with MySQL server [" + self.BD_NAME + "]")
+
+    def execute_get_sql(self, sql):
+        """SELECT"""
+        results = None
+        print("Executing:\n", sql)
+        try:
+            # Execute the SQL command
+            self.cursor.execute(sql)
+            # Fetch all the rows in a list of lists.
+            results = self.cursor.fetchall()
+        except Exception as error:
+            print(error)
+            print ("Error: unable to fetch data")
+        
+        return results
 
 if __name__ == '__main__':
     df = pd.read_csv(root + os.sep + 'data' + os.sep + 'BASE.csv', index_col=0)

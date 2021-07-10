@@ -22,4 +22,4 @@ ML_Scrapping/titles.tsv
 #Json
 *.json
 
-4_Word_GAN.h5
+5_Word_GAN.h5
