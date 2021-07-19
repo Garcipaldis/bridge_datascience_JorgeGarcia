@@ -73,6 +73,7 @@ class StreamFuncs(Visualizer, FlaskFuncs):
             st.dataframe(df)
 
     def model_page(self):
+        """Infrastructure for model prediction."""
         st.title('Text Generation Machine Learning Project (GAN-Dalf)')
         st.subheader('Text Generation Models')
         gc.collect()
@@ -90,6 +91,7 @@ class StreamFuncs(Visualizer, FlaskFuncs):
         st.write(self.get_predicction(model, string=sentence, quote_len=quote_length, temperature=temp))
 
     def sql_page(self):
+        """Brings the model_comparison table from MySQL server."""
         st.title('Text Generation Machine Learning Project (GAN-Dalf)')
         st.subheader('SQL Model Scores Table')
         loaded_json = self.read_json(self.settings_file)

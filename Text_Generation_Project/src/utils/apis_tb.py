@@ -13,6 +13,7 @@ from src.utils.folders_tb import Folders
 settings_file = root + os.sep + 'src' + os.sep + "utils" + os.sep + "settings_sql.json"
 
 class FlaskFuncs(Preprocessor, Folders):
+    """Class designed to operate with the server.py API script."""
 
     def __init__(self, df, root, settings_file):
         Preprocessor.__init__(self, df)
@@ -31,6 +32,15 @@ class FlaskFuncs(Preprocessor, Folders):
         self.SQL_ALCHEMY = 'mysql+pymysql://' + self.USER + ':' + self.PASSWORD + '@' + self.IP_DNS + ':' + str(self.PORT) + '/' + self.BD_NAME
 
     def get_predicction(self, model, string=False, quote_len=40, temperature=1):
+        """"Returns a prediction based on the selected model. Each model requires its predefined data preprocessing.
+            - Args:
+                - model: keras model loaded in self.models.
+                - string: Input string. If false, the model predicts with a random input.
+                - quote_len: Number of characters/words to show in output. Only affects LSTM models.
+                - temperature: Sequence variance distortion. Recommended low values for character based models.
+            - Returns:
+                - Prediction
+        """
         
         if model == '1_Base_Quote_LSTM.h5' or model == '3_Bidirectional_LSTM.h5':
             self.preprocess(option='character', mode='base')
@@ -60,6 +70,7 @@ class FlaskFuncs(Preprocessor, Folders):
             return 'Input is not a valid model'
 
     def get_models(self):
+        """Loads models from selected path into a list."""
         path = self.root + os.sep + 'models'
         files = os.listdir(path)
 
@@ -68,6 +79,11 @@ class FlaskFuncs(Preprocessor, Folders):
         return models
 
     def insert_df_to_mysql(self, input_df=None, option=1, table_name=''):
+        """Inserts dataframe into MySQL server.
+            - Args:
+                - input_df: Desired dataframe to insert as a table. If None, the class attribute dataframe will be inserted.
+                - option: 1 for inserting class attribute dataframe and 2 for using the input_df.
+                - table_name: required if option 2 is selected."""
 
         engine = create_engine(self.SQL_ALCHEMY)
         if option == 1:

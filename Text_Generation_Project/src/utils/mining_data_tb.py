@@ -26,11 +26,13 @@ extra_quotes = {
 ######################################################################################################################################################
 
 class QuoteCleaner:
+    """ Class designed for basic transformation on input dataframe or .txt file."""
 
     def __init__(self, filepath):
         self.df = self.create_quote_dataset(filepath)
 
     def create_quote_dataset(self, filepath):
+        """Reads .txt file containing the memorable quotes and returns a dataframe."""
         with open(filepath, 'r') as raw:
             text = raw.readlines()
             lista = [line for line in text if line != '\n']
@@ -42,15 +44,18 @@ class QuoteCleaner:
         return pd.DataFrame(data, index=range(len(data['title'])))
 
     def add_quotes(self, extra_quotes):
+        """Adds input dictionary of quotes into the dataframe."""
         for title, quotes in extra_quotes.items():
             for quote in quotes:
                 self.df = self.df.append({'title':title, 'quote':quote}, ignore_index=True)
 
     def save_quote_df(self, path):
+        """Saves dataframe into desired location."""
         self.df.to_csv(path)
         print('Successfully saved Dataframe.')
 
     def clean_text(self, dirpath, name):
+        """For creating a corpus text."""
         with open(dirpath + os.sep + name, 'r') as raw:
             corpus = raw.readlines()
         lines = [line.replace('\n','') for line in corpus]
@@ -64,6 +69,7 @@ class QuoteCleaner:
 ###################################################################################################################################################
 
 class Preprocessor:
+    """Base class for all input preprocessing and basic model functions."""
 
     def __init__(self, input_object):
         if isinstance(input_object, str):
@@ -74,7 +80,7 @@ class Preprocessor:
             self.text = ''
 
     def get_corpus(self, quote_list):
-        # Corpus
+        """Returns corpus text in lowercase from quote list."""
         text = ''
         for q in quote_list:
             text += ' ' + q
@@ -83,7 +89,17 @@ class Preprocessor:
         return text.lower()
 
 
-    def preprocess(self, maxlen=40, step=3, column='quote', option='character', mode='base', min_word_frequency=2):
+    def preprocess(self, maxlen=40, step=3, column='quote', option='character', mode='base', min_word_frequency=3):
+        """All-around preprocessor for input quote dataframe. Creates all the needed class attributes.
+            - Args:
+                - maxlen: Sequence length into which the corpus is divided. This will result in the number of rows of each X array.
+                - step: Affects the number of sequences to be generated.
+                - column: dataframe column from which to extract the quotes.
+                - option: 'character' for character-based models and 'word' for word-based models.
+                - mode: 'base' for LSTM models and 'gan' for GAN models.
+                - min_word_frequency: Minimum word frequency to take into account when creating the word dictionary. 
+                                    Affects the number of columns
+        """
 
         self.maxlen = maxlen
 
@@ -130,7 +146,7 @@ class Preprocessor:
                 word_freq[word] = word_freq.get(word, 0) + 1
 
             ignored_words = set()
-            for k, v in word_freq.items():
+            for k in word_freq.keys():
                 if word_freq[k] < min_word_frequency:
                     ignored_words.add(k)
 
@@ -198,7 +214,7 @@ class Preprocessor:
         self.Y = y
 
     def sample(self, preds, temperature=1.0):
-        # helper function to sample an index from a probability array
+        """helper function to sample an index from a probability array"""
         preds = np.asarray(preds).astype("float64")
         preds = np.log(preds) / temperature
         exp_preds = np.exp(preds)
@@ -207,6 +223,17 @@ class Preprocessor:
         return np.argmax(probas)
 
     def generate(self, model, mode='base', option='character', quote_len=40, sentence=False, temperature=1.0, verbose=False):
+        """ Returns a prediction from desired model.
+            - Args:
+                - model: Selected keras model.
+                - mode: 'base' for LSTM models and 'gan' for GAN models.
+                - option: 'character' for character-based models and 'word' for word-based models.
+                - quote_len: Number of characters/words to show in output. Only affects LSTM models.
+                - sentence: Input string. If false, the model predicts with a random input.
+                - temperature: Sequence variance distortion. Recommended low values for character based models.
+                - verbose: If True, prints generations steps.
+            - Returns:
+                - Prediction string"""
         
         if verbose:
             print("...Temperature:", temperature)
@@ -272,6 +299,7 @@ class Preprocessor:
         return generated
 
     def load_model(self, model_path):
+        """Loads a keras model from desired path."""
 
         self.model = keras.models.load_model(model_path)
         print('Model successfully loaded.')

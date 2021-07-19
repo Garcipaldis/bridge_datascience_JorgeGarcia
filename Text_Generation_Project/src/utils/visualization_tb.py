@@ -20,6 +20,7 @@ class Visualizer(Preprocessor):
         self.text_in_words = []
 
     def get_word_popularity(self):
+        """Returns a dataframe with the most common words from token list."""
 
         if len(self.text_in_words) == 0:
             self.preprocess(option='word', mode='base')

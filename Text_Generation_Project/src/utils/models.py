@@ -15,7 +15,17 @@ from src.utils.mining_data_tb import Preprocessor
 
 class LSTM_Generator(Preprocessor):
 
-    def __init__(self, df, maxlen=40, step=3, option='character', min_word_frequency=2, model_type=1):
+    def __init__(self, df, maxlen=40, step=3, option='character', min_word_frequency=3, model_type=1):
+        """Class for creating a LSTM Model.
+            - Args:
+                - df: Base Quote Dataframe.
+                - maxlen: Sequence length into which the corpus is divided. This will result in the number of rows of each X array.
+                - step: Affects the number of sequences to be generated.
+                - option: 'character' for character-based models and 'word' for word-based models.
+                - min_word_frequency: Minimum word frequency to take into account when creating the word dictionary. 
+                                    Affects the number of columns
+                - model_type: 1 for basic LSTM and 2 for Bidirectional LSTM.
+        """
         Preprocessor.__init__(self, df)
         self.maxlen = maxlen
         self.step = step
@@ -26,6 +36,7 @@ class LSTM_Generator(Preprocessor):
         self.model = self.base_model(model_type=model_type)
 
     def base_model(self, model_type=1):
+        """Returns a basic or bidirectional LSTM model."""
 
         if model_type == 1:
             model = keras.Sequential([
@@ -51,12 +62,23 @@ class LSTM_Generator(Preprocessor):
         return model
 
     def train(self, epochs=1, batch_size=128):
+        """Trains model.
+            - Args:
+                - epochs: Number of epochs.
+                - batch_size: number of input arrays to be used in each epoch."""
 
         print(f'Training {self.option} LSTM model for [epochs:{epochs}, batch_size:{batch_size}]')
         self.model.fit(self.X, self.Y, batch_size=batch_size, epochs=epochs)
         print('Finished training.')
 
     def predict(self, option='character', quote_len=40, sentence=False, temperature=1.0, verbose=False):
+        """Returns a prediction:
+            - Args:
+                - option: 'character' for character-based models and 'word' for word-based models.
+                - quote_len: Number of characters/words to show in output. Only affects LSTM models.
+                - sentence: Input string. If false, the model predicts with a random input.
+                - temperature: Sequence variance distortion. Recommended low values for character based models.
+                - verbose: If True, prints generations steps."""
 
         prediction = self.generate(self.model, mode='base', option=option, quote_len=quote_len, 
                                     sentence=sentence, temperature=temperature, verbose=verbose)
@@ -64,6 +86,7 @@ class LSTM_Generator(Preprocessor):
         return prediction
 
     def save_model(self, filepath):
+        """Saves model into desired path."""
 
         self.model.save(filepath)
         print('Model saved.')
@@ -72,7 +95,16 @@ class LSTM_Generator(Preprocessor):
 
 class GAN(Preprocessor):
 
-    def __init__(self, df, maxlen=40, step=3, option='character', min_word_frequency=2):
+    def __init__(self, df, maxlen=40, step=3, option='character', min_word_frequency=3):
+        """Class for creating a LSTM Model.
+            - Args:
+                - df: Base Quote Dataframe.
+                - maxlen: Sequence length into which the corpus is divided. This will result in the number of rows of each X array.
+                - step: Affects the number of sequences to be generated.
+                - option: 'character' for character-based models and 'word' for word-based models.
+                - min_word_frequency: Minimum word frequency to take into account when creating the word dictionary. 
+                                    Affects the number of columns
+        """
         Preprocessor.__init__(self, df)
         self.maxlen = maxlen
         self.step = step
@@ -82,7 +114,7 @@ class GAN(Preprocessor):
 
         self.preprocess(maxlen=self.maxlen, step=self.step, option=option, mode='gan', min_word_frequency=min_word_frequency)
         
-        optimizer = Adam(learning_rate=0.0002)
+        optimizer = Adam(learning_rate=0.0002, beta_1=0.5)
 
         # Build and compile the discriminator
         self.discriminator = self.build_discriminator()
@@ -99,6 +131,7 @@ class GAN(Preprocessor):
         self.gan.compile(loss='binary_crossentropy', optimizer=optimizer)
 
     def get_latent_points(self, n_samples):
+        """Returns a random Latent Point array."""
 
         x_input = np.zeros((n_samples, self.maxlen, len(self.tokens)))
 
@@ -113,6 +146,7 @@ class GAN(Preprocessor):
 
 
     def generate_fake_samples(self, model, n_samples):
+        """Returns a latent point array labeled as fake samples."""
 
         x_input = self.get_latent_points(n_samples)
 
@@ -122,6 +156,7 @@ class GAN(Preprocessor):
         return X_fake, y_fake
 
     def generate_real_samples(self, n_samples):
+        """Returns real sequence arrays labeled as real samples."""
 
         X_true = np.array(random.sample(list(self.X), n_samples))
         y_true = np.ones(n_samples)
@@ -129,6 +164,7 @@ class GAN(Preprocessor):
         return X_true, y_true
 
     def generate_gan_samples(self, n_samples):
+        """Returns a latent point array labeled as real samples."""
 
         X_gan = self.get_latent_points(n_samples)
         y_gan = np.ones(len(X_gan))
@@ -136,6 +172,7 @@ class GAN(Preprocessor):
         return X_gan, y_gan
 
     def build_discriminator(self):
+        """Returns a discriminator model with the [Convolution -> LeakyRelu -> Dropout] Layer Layout."""
 
         discriminator = keras.Sequential([
             layers.Conv1D(filters=len(self.tokens), kernel_size=(3), input_shape=(self.maxlen, len(self.tokens)), padding='same'),
@@ -155,6 +192,7 @@ class GAN(Preprocessor):
         return discriminator
 
     def build_generator(self):
+        """Returns a generator model with the [Dense -> LeakyRelu -> BatchNormalization] Layer Layout."""
 
         generator = keras.Sequential([
             layers.Dense((len(self.tokens)), input_shape=(self.maxlen, len(self.tokens))),
@@ -175,6 +213,7 @@ class GAN(Preprocessor):
         return generator
 
     def build_gan(self, g_model, d_model):
+        """Returns the GAN model."""
 
         gan = keras.Sequential([
             layers.InputLayer(input_shape=(self.maxlen, len(self.tokens))),
@@ -187,6 +226,12 @@ class GAN(Preprocessor):
 
 
     def train(self, epochs, batch_size=128, sample_interval=50, verbose=True):
+        """Trains the GAN model.
+            - Args:
+                - epochs: Number of epochs
+                - batch_size: For each epoch, the whole data is divided into batches of the desired size.
+                - sample interval: Number of trains before printing the metrics.
+                - verbose: 1 for printing the sample interval and 2 or more for printing training steps."""
 
         batch_per_epoch = len(self.X)//batch_size
         half_batch = batch_size//2
@@ -230,6 +275,13 @@ class GAN(Preprocessor):
                     self.gen_loss.append(g_loss)
 
     def predict(self, option='character', quote_len=40, sentence=False, temperature=1.0, verbose=False):
+        """Returns a prediction:
+            - Args:
+                - option: 'character' for character-based models and 'word' for word-based models.
+                - quote_len: Number of characters/words to show in output. Only affects LSTM models.
+                - sentence: Input string. If false, the model predicts with a random input.
+                - temperature: Sequence variance distortion. Recommended low values for character based models.
+                - verbose: If True, prints generations steps."""
 
         prediction = self.generate(self.generator, mode='gan', option=option, quote_len=quote_len, 
                                     sentence=sentence, temperature=temperature, verbose=verbose)
@@ -237,13 +289,14 @@ class GAN(Preprocessor):
         return prediction
 
     def get_mean_scores(self):
-        # Mean Loss and Accuracy for real and fake samples
+        """Returns Mean Loss and Accuracy for real and fake samples"""
         gan_loss = (self.disc_loss[-1][0][0] + self.disc_loss[-1][1][0])/2
         gan_acc = (self.disc_loss[-1][0][1] + self.disc_loss[-1][1][1])/2
 
         return gan_loss, gan_acc
 
     def save_model(self, filepath):
+        """Saves model into desired location."""
 
         self.generator.save(filepath)
         print('GAN Generator model saved.')
